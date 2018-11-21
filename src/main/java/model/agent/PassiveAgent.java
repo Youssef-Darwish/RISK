@@ -26,6 +26,8 @@ public class PassiveAgent implements Agent {
         newState.setCurrentPlayer(currentState.getOpponentPlayer());
         newState.setOpponentPlayer(currentState.getCurrentPlayer());
 
+        // update bonus points
+
         // make new state : add copy function to GameState class
 
         return newState;

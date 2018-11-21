@@ -43,4 +43,19 @@ public class Continent {
         }
         return true;
     }
+
+    // Used by aggressive agent ?
+    public Country getListFortifiedCountry(){
+        int minIndex = 0;
+        for (int i = 0;i < countries.size();i++){
+            if(countries.get(i).getUnits()<countries.get(minIndex).getUnits()){
+                minIndex = i;
+            }
+        }
+
+        return countries.get(minIndex);
+    }
+
+
+
 }

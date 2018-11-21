@@ -1,5 +1,6 @@
 package main.java.model.world;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -14,6 +15,8 @@ public class Player {
     public Player(int id) {
         this.id = id;
         lastTurnBonusUnits = 0;
+        conqueredContinents = new ArrayList<>();
+        conqueredCountries = new ArrayList<>();
         //2 * conqueredContinents.size() + max(3, floor(conqueredCountries.size() / 3) + lastTurnBonusUnits)
     }
 
@@ -99,5 +102,17 @@ public class Player {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+
+    //TODO implement / decide : canAttack in Player Class or State Class
+    public boolean canAttack(Country country){
+
+        return false;
+    }
+
+    //TODO implement / discuss logic
+    public void attack(Country country){
+
     }
 }

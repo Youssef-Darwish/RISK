@@ -1,8 +1,12 @@
 package main.java.model.agent;
 
 import main.java.model.game.GameState;
+import main.java.model.world.Continent;
 import main.java.model.world.Country;
 import main.java.model.world.Player;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class AgressiveAgent implements Agent {
     private GameState newState ;
@@ -17,8 +21,15 @@ public class AgressiveAgent implements Agent {
     @Override
     public GameState getNextState(GameState currentState) {
 
-        //Steps for aggressive Agent
+        /*
+        3. An aggressive agent, that always places all its bonus armies on the vertex with the most
+           armies, and greedily attempts to attack so as to cause the most damage - i.e. to prevent
+           its opponent getting a continent bonus (the largest possible).
+         */
 
+        //Steps for aggressive Agent : or this is the nearly pacifist ? :'D
+
+        //  0-add units on the most fortified country
         //  1-get conquered continents
         //  2-for each continent:
         //  3-get least fortified country
@@ -30,16 +41,22 @@ public class AgressiveAgent implements Agent {
         //  9-else : go to 7
 
 
-
-
         agentPlayer = currentState.getCurrentPlayer();
-        Country country = agentPlayer.getWeakestCountry();
-        country.setUnits(country.getUnits() + agentPlayer.getlastTurnBonusUnits());
-        agentPlayer.setlastTurnBonusUnits(agentPlayer.getTurnBonus()); // check logic
 
-        // switch players
-        newState.setCurrentPlayer(currentState.getOpponentPlayer());
-        newState.setOpponentPlayer(currentState.getCurrentPlayer());
+        //step 0
+
+        Country country = agentPlayer.getMostFortifiedCountry();
+        country.setUnits(country.getUnits()+agentPlayer.getlastTurnBonusUnits());
+        List<Continent> continents = agentPlayer.getConqueredContinents();
+        for (Continent continent : continents){
+            // get sorted list of countries
+            // loop , can attack ? attack
+        }
+
+
+        //update bonus units
+
+
 
         // make new state : add copy function to GameState class
 
