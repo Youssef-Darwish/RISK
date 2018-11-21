@@ -10,6 +10,7 @@ public class Player {
     private List<Country> conqueredCountries;
     private List<Continent> conqueredContinents;
 
+    //TODO : logic and order of calculating bonus armies ( next & current)
     public Player(int id) {
         this.id = id;
         lastTurnBonusUnits = 0;
@@ -82,8 +83,9 @@ public class Player {
     }
 
     public int getTurnBonus(){
-        //2 * conqueredContinents.size() + max(3, floor(conqueredCountries.size() / 3) + lastTurnBonusUnits)
-        return 0;
+        Double bonus =  2 * conqueredContinents.size() +
+                Math.max(3, Math.floor(conqueredCountries.size() / 3) + lastTurnBonusUnits);
+        return bonus.intValue();
     }
 
     @Override

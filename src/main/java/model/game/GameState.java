@@ -12,6 +12,7 @@ public class GameState {
     private Player currentPlayer, opponentPlayer;
     private WorldMap world;
 
+    //TODO : game constructor , copy state , what else ?
     public GameState(){
 
     }
@@ -24,6 +25,9 @@ public class GameState {
         return currentPlayer;
     }
 
+    public Player getOpponentPlayer(){
+        return opponentPlayer;
+    }
 
     public void setWorld(WorldMap world) {
         this.world = world;
@@ -33,6 +37,9 @@ public class GameState {
         this.currentPlayer = currentPlayer;
     }
 
+    public void setOpponentPlayer(Player player){
+        opponentPlayer = player;
+    }
 
     public List<GameState> getNextStates(){
         return null;
@@ -43,5 +50,8 @@ public class GameState {
     }
 
 
+    public GameState copyState(){
+        return new GameState();
+    }
 
 }
