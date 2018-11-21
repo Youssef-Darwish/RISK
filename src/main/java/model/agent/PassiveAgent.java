@@ -9,27 +9,27 @@ public class PassiveAgent implements Agent {
     private GameState newState ;
     private Player agentPlayer;
 
+    //TODO Agent : singleton ?
+
     // move the needed function in Player Class to state class ? and call them by ID ?
     public PassiveAgent(){
-       newState = new GameState();
+
     }
 
     @Override
     public GameState getNextState(GameState currentState) {
+        newState = currentState.copy();
 
         agentPlayer = currentState.getCurrentPlayer();
         Country country = agentPlayer.getWeakestCountry();
-        country.setUnits(country.getUnits() + agentPlayer.getlastTurnBonusUnits());
-        agentPlayer.setlastTurnBonusUnits(agentPlayer.getTurnBonus()); // check logic
+        country.setUnits(country.getUnits() + agentPlayer.getTurnBonus());
+        agentPlayer.setlastTurnBonusUnits(0);
 
         // switch players
         newState.setCurrentPlayer(currentState.getOpponentPlayer());
         newState.setOpponentPlayer(currentState.getCurrentPlayer());
 
         // update bonus points
-
-        // make new state : add copy function to GameState class
-
         return newState;
     }
 }

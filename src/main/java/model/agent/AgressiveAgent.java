@@ -15,50 +15,80 @@ public class AgressiveAgent implements Agent {
     // move the needed function in Player Class to state class ? and call them by ID ?
     public AgressiveAgent(){
 
-        newState = new GameState();
+
     }
 
     @Override
     public GameState getNextState(GameState currentState) {
 
-        /*
-        3. An aggressive agent, that always places all its bonus armies on the vertex with the most
-           armies, and greedily attempts to attack so as to cause the most damage - i.e. to prevent
-           its opponent getting a continent bonus (the largest possible).
-         */
-
-        //Steps for aggressive Agent : or this is the nearly pacifist ? :'D
-
-        //  0-add units on the most fortified country
-        //  1-get conquered continents
+        //Steps for aggressive Agent
+        //  0-add units on the most fortified country  -> OK
+        //  1-get conquered continents                 -> OK
         //  2-for each continent:
-        //  3-get least fortified country
+        //  3-get most fortified country
         //  4-if (canAttack) --> attack
         //  5-else : got to 3
         //  6-if opponentPlayer.getConqueredContinents.size==0
-        //  7-get weakest country
+        //  7-get weakest country                       -->some issues in loop
         //  8-if (canAttack) -->attack
         //  9-else : go to 7
 
-
+        newState = currentState.copy();
         agentPlayer = currentState.getCurrentPlayer();
-
-        //step 0
-
         Country country = agentPlayer.getMostFortifiedCountry();
-        country.setUnits(country.getUnits()+agentPlayer.getlastTurnBonusUnits());
+        country.setUnits(country.getUnits()+agentPlayer.getTurnBonus());
         List<Continent> continents = agentPlayer.getConqueredContinents();
-        for (Continent continent : continents){
-            // get sorted list of countries
-            // loop , can attack ? attack
+
+
+        // if the opponent has conquered continents
+        if (continents.size()!=0){
+
+            for (Continent continent : continents){
+
+                Country strongest = continent.getMostFortifiedCountry();
+                List<Country> neighbours = strongest.getNeighbours();
+
+                for (Country neighbourCountry : neighbours){
+                    if (neighbourCountry.canAttack(strongest)){
+                        // update country units + update occupant + update conqueredContinents + updateBonusPoints
+                        int diff = neighbourCountry.getUnits()-strongest.getUnits();
+                        neighbourCountry.setUnits(1);   //leave 1 unit in the attacking country
+                        strongest.setUnits(diff-1);     // move the rest to the attacked country
+                        strongest.setOccupant(agentPlayer); //update occupant
+
+                        // update conquered continents
+                        agentPlayer.setlastTurnBonusUnits(2);
+
+
+                    }
+                }
+                // loop , can attack ? attack
+            }
+        }else {
+
+            //repeated code : pack it in one function
+            //we may return the nearest conquered as list
+            Continent continent = agentPlayer.getNearestConqueredContinent();
+
+            Country strongest = continent.getMostFortifiedCountry();
+            List<Country> neighbours = strongest.getNeighbours();
+
+            for (Country neighbourCountry : neighbours){
+                if (neighbourCountry.canAttack(strongest)){
+                    // update country units + update occupant + update conqueredContinents + updateBonusPoints
+                    int diff = neighbourCountry.getUnits()-strongest.getUnits();
+                    neighbourCountry.setUnits(1);   //leave 1 unit in the attacking country
+                    strongest.setUnits(diff-1);     // move the rest to the attacked country
+                    strongest.setOccupant(agentPlayer); //update occupant
+
+                    // update conquered continents
+                    agentPlayer.setlastTurnBonusUnits(2);
+
+                //TODO : Incomplete Logic
+
+                }
+            }
         }
-
-
-        //update bonus units
-
-
-
-        // make new state : add copy function to GameState class
 
         return newState;
     }

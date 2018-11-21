@@ -50,7 +50,7 @@ public class GameState {
     }
 
 
-    public GameState copyState(){
+    public GameState copy(){
         return new GameState();
     }
 

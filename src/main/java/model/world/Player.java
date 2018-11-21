@@ -87,7 +87,7 @@ public class Player {
 
     public int getTurnBonus(){
         Double bonus =  2 * conqueredContinents.size() +
-                Math.max(3, Math.floor(conqueredCountries.size() / 3) + lastTurnBonusUnits);
+                Math.max(3,( Math.floor(conqueredCountries.size() / 3) + lastTurnBonusUnits));
         return bonus.intValue();
     }
 
@@ -106,10 +106,8 @@ public class Player {
 
 
     //TODO implement / decide : canAttack in Player Class or State Class
-    public boolean canAttack(Country country){
+    //Done in country Class
 
-        return false;
-    }
 
     //TODO implement / discuss logic
     public void attack(Country country){

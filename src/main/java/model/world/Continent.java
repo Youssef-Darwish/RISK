@@ -44,8 +44,8 @@ public class Continent {
         return true;
     }
 
-    // Used by aggressive agent ?
-    public Country getListFortifiedCountry(){
+    // Used by semi-pacifist agent
+    public Country getLeastFortifiedCountry(){
         int minIndex = 0;
         for (int i = 0;i < countries.size();i++){
             if(countries.get(i).getUnits()<countries.get(minIndex).getUnits()){
@@ -56,6 +56,21 @@ public class Continent {
         return countries.get(minIndex);
     }
 
+    // used by aggressive agent
+    public Country getMostFortifiedCountry(){
+        int maxIndex = 0;
+        for (int i = 0;i < countries.size();i++){
+            if(countries.get(i).getUnits()>countries.get(maxIndex).getUnits()){
+                maxIndex = i;
+            }
+        }
 
+        return countries.get(maxIndex);
+    }
 
 }
+
+
+//TODO : add comparator :
+//compare continents : owned by oppnent : put first ,
+//else : sort by number of countries owned by opponent
