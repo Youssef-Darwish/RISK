@@ -1,5 +1,6 @@
 package main.java.model.world;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -10,9 +11,12 @@ public class Player {
     private List<Country> conqueredCountries;
     private List<Continent> conqueredContinents;
 
+    //TODO : logic and order of calculating bonus armies ( next & current)
     public Player(int id) {
         this.id = id;
         lastTurnBonusUnits = 0;
+        conqueredContinents = new ArrayList<>();
+        conqueredCountries = new ArrayList<>();
         //2 * conqueredContinents.size() + max(3, floor(conqueredCountries.size() / 3) + lastTurnBonusUnits)
     }
 
@@ -82,8 +86,9 @@ public class Player {
     }
 
     public int getTurnBonus(){
-        //2 * conqueredContinents.size() + max(3, floor(conqueredCountries.size() / 3) + lastTurnBonusUnits)
-        return 0;
+        Double bonus =  2 * conqueredContinents.size() +
+                Math.max(3,( Math.floor(conqueredCountries.size() / 3) + lastTurnBonusUnits));
+        return bonus.intValue();
     }
 
     @Override
@@ -97,5 +102,15 @@ public class Player {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+
+    //TODO implement / decide : canAttack in Player Class or State Class
+    //Done in country Class
+
+
+    //TODO implement / discuss logic
+    public void attack(Country country){
+
     }
 }
