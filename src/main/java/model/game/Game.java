@@ -18,7 +18,12 @@ public class Game {
         // Play takes both players' agents and plays the game starting from the given game state
         GameState currGameState = initialState;
         while (!currGameState.isFinalState()) {
-            // Proceed with the game
+            if (currGameState.getCurrentPlayer().equals(currGameState.getWorld().getPlayerOne())) {
+                currGameState = playerOneAgent.getNextState(currGameState);
+            } else {
+                currGameState = playerTwoAgent.getNextState(currGameState);
+            }
         }
+        System.out.println(currGameState.getWinner().getId());
     }
 }

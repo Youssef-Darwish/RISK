@@ -159,4 +159,11 @@ public class GameState {
         // Returns true if this game state is a final game state (a player has won the game by conquering all countries)
         return true;
     }
+
+    public Player getWinner() {
+        if (isFinalState()) {
+            return this.opponentPlayer; // could change depending on implementation of isFinalState
+        }
+        return null; // Or maybe throw an exception as there isn't a winner yet
+    }
 }
