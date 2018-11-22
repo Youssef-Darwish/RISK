@@ -1,5 +1,6 @@
 package main.java.model.world;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Country {
@@ -12,6 +13,7 @@ public class Country {
 
     public Country(int id) {
         this.id = id;
+        this.neighbours = new ArrayList<>();
     }
     public int getId() {
         return id;

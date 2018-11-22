@@ -3,7 +3,7 @@ package main.java.model.world;
 import java.util.List;
 
 public class Continent {
-    public Continent(List<Integer> countriesIds) {
+    public Continent(int continentBonus, List<Integer> countriesIds) {
         //TODO
     }
 
