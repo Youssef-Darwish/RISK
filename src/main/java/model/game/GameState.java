@@ -36,7 +36,7 @@ public class GameState {
     private Player currentPlayer, opponentPlayer;
 
     public GameState(GameState gameState) {
-        // TODO: Creates a new game state by copying given game state.
+        // TODO: Creates a new game state by copying given game state (deep copy).
     }
 
     public GameState(String inputFileName){
@@ -59,10 +59,9 @@ public class GameState {
         }
 
         // Creating continents
-        int continentsNumber = parser.getContinentsNumber();
+        int continentId = 0;
         for (List<Integer> continentSpecification : parser.getContinents()) {
-            Continent continent = new Continent(continentSpecification.get(0), continentSpecification.subList(1, continentsNumber));
-            this.world.addContinent(continent);
+            this.world.addContinent(continentId++, continentSpecification);
         }
 
         // Adding players' units to countries

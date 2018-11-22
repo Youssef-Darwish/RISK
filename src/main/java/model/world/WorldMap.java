@@ -19,7 +19,11 @@ public class WorldMap {
         return this.countries.get(id);
     }
 
-    public void addContinent(Continent continent) {
+    public void addContinent(int continentId, List<Integer> continentSpecification) {
+        Continent continent = new Continent(continentId, continentSpecification.get(0));
+        for (int countryId :  continentSpecification.subList(1, continentSpecification.size())) {
+            continent.addCountry(getCountryById(countryId));
+        }
         this.continents.add(continent);
     }
 

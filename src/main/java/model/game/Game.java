@@ -16,5 +16,9 @@ public class Game {
 
     public void play(GameState initialState, Agent playerOneAgent, Agent playerTwoAgent) {
         // Play takes both players' agents and plays the game starting from the given game state
+        GameState currGameState = initialState;
+        while (!currGameState.isFinalState()) {
+            // Proceed with the game
+        }
     }
 }
