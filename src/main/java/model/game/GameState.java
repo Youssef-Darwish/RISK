@@ -42,6 +42,58 @@ public class GameState {
     public GameState(String inputFileName){
         this.world = new WorldMap();
         this.init(inputFileName);
+
+        this.printStateToConsole();
+    }
+
+    private void printStateToConsole() {
+        System.out.println("World countries: ");
+        for (Country country : this.world.getCountries()) {
+            System.out.println("Id: " + country.getId() + ", Occupant Id: " + country.getOccupant().getId() + ", Units in country: " + country.getUnits() + ", Continent Id: " + country.getContinent().getId());
+            System.out.print("Neighbours ids: ");
+            for (Country neighbour : country.getNeighbours()) {
+                System.out.print(neighbour.getId() + " ");
+            }
+            System.out.println();
+        }
+
+        System.out.println();
+        System.out.println("World continents: ");
+        for (Continent continent : this.world.getContinents()) {
+            System.out.println("Id: " + continent.getId() + ", bonus: " + continent.getContinentBonus());
+            System.out.print("Countries ids: ");
+            for (Country country : continent.getCountries()) {
+                System.out.print(country.getId() + " ");
+            }
+            System.out.println();
+        }
+
+        System.out.println();
+        System.out.println("Player 1:");
+        System.out.println("Id: " + this.world.getPlayerOne().getId() + ", last turn bonus: " + this.world.getPlayerOne().getLastTurnBonusUnits());
+        System.out.print("Occupied Countries: ");
+        for (Country country : this.world.getPlayerOne().getConqueredCountries()) {
+            System.out.print(country.getId() + " ");
+        }
+        System.out.println();
+        System.out.print("Occupied Continents: ");
+        for (Continent continent : this.world.getPlayerOne().getConqueredContinents()) {
+            System.out.print(continent.getId() + " ");
+        }
+        System.out.println();
+
+        System.out.println();
+        System.out.println("Player 2:");
+        System.out.println("Id: " + this.world.getPlayerTwo().getId() + ", last turn bonus: " + this.world.getPlayerTwo().getLastTurnBonusUnits());
+        System.out.print("Occupied Countries: ");
+        for (Country country : this.world.getPlayerTwo().getConqueredCountries()) {
+            System.out.print(country.getId() + " ");
+        }
+        System.out.println();
+        System.out.print("Occupied Continents: ");
+        for (Continent continent : this.world.getPlayerTwo().getConqueredContinents()) {
+            System.out.print(continent.getId() + " ");
+        }
     }
 
     private void init(String inputFileName) {
