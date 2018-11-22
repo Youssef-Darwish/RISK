@@ -1,7 +1,11 @@
 package main.java.model.world;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
+import static java.lang.Math.floor;
+import static java.lang.Math.max;
 
 public class Player {
 
@@ -12,15 +16,16 @@ public class Player {
 
     public Player(int id) {
         this.id = id;
-        lastTurnBonusUnits = 0;
-        //2 * conqueredContinents.size() + max(3, floor(conqueredCountries.size() / 3) + lastTurnBonusUnits)
+        this.lastTurnBonusUnits = 0;
+        this.conqueredCountries = new ArrayList<>();
+        this.conqueredContinents = new ArrayList<>();
     }
 
     public int getId() {
         return id;
     }
 
-    public int getlastTurnBonusUnits() {
+    public int getLastTurnBonusUnits() {
         return lastTurnBonusUnits;
     }
 
@@ -28,26 +33,29 @@ public class Player {
         return conqueredCountries;
     }
 
+    public void addConqueredCountry(Country country) {
+        this.conqueredCountries.add(country);
+    }
+
+    public void removeConqueredCountry(Country country) {
+        this.conqueredCountries.remove(country);
+    }
+
     public List<Continent> getConqueredContinents() {
         return conqueredContinents;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void addConqueredContinent(Continent continent) {
+        this.conqueredContinents.add(continent);
     }
 
-    public void setlastTurnBonusUnits(int bonusUnits) {
+    public void removeConqueredContinent(Continent continent) {
+        this.conqueredContinents.remove(continent);
+    }
+
+    public void setLastTurnBonusUnits(int bonusUnits) {
         this.lastTurnBonusUnits = bonusUnits;
     }
-
-    public void setConqueredCountries(List<Country> conqueredCountries) {
-        this.conqueredCountries = conqueredCountries;
-    }
-
-    public void setConqueredContinents(List<Continent> conqueredContinents) {
-        this.conqueredContinents = conqueredContinents;
-    }
-
 
     public Country getMostFortifiedCountry(){
         Country mostFortifiedCountry =  this.getConqueredCountries().get(0);
@@ -82,8 +90,8 @@ public class Player {
     }
 
     public int getTurnBonus(){
-        //2 * conqueredContinents.size() + max(3, floor(conqueredCountries.size() / 3) + lastTurnBonusUnits)
-        return 0;
+        // At the start of each turn, the palyer gets a bonus = 2 per each continent + # of conquered countries / 3 + bonus from last turn conquests.
+        return (2 * conqueredContinents.size()) + (int)max(3, floor(conqueredCountries.size() / 3)) + lastTurnBonusUnits;
     }
 
     @Override

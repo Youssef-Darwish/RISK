@@ -53,9 +53,7 @@ public class GameState {
             this.world.addCountry(i);
         }
         for (Pair<Integer, Integer> edge : parser.getEdges()) {
-            int countryOneId = edge.getKey() - 1;
-            int countryTwoId = edge.getValue() - 1;
-            this.world.addEdge(countryOneId, countryTwoId);
+            this.world.addEdge(edge.getKey() - 1, edge.getValue() - 1);
         }
 
         // Creating continents
@@ -65,21 +63,8 @@ public class GameState {
         }
 
         // Adding players' units to countries
-        List<Integer> playerOneUnits = parser.getPlayerOneUnits();
-        for (int i = 0; i < countries; i++) {
-            if (playerOneUnits.get(i) > 0) {
-                this.world.getCountryById(i).setUnits(playerOneUnits.get(i));
-                this.world.getCountryById(i).setOccupant(this.world.getPlayerOne());
-            }
-        }
-
-        List<Integer> playerTwoUnits = parser.getPlayerTwoUnits();
-        for (int i = 0; i < countries; i++) {
-            if (playerTwoUnits.get(i) > 0) {
-                this.world.getCountryById(i).setUnits(playerTwoUnits.get(i));
-                this.world.getCountryById(i).setOccupant(this.world.getPlayerTwo());
-            }
-        }
+        this.world.setPlayerOneUnits(parser.getPlayerOneUnits());
+        this.world.setPlayerTwoUnits(parser.getPlayerTwoUnits());
 
         // Initializing current and opponent players
         this.currentPlayer = this.world.getPlayerOne();
@@ -114,7 +99,7 @@ public class GameState {
 
     public boolean isFinalState() {
         // Returns true if this game state is a final game state (a player has won the game by conquering all countries)
-        return false;
+        return true;
     }
 
 }

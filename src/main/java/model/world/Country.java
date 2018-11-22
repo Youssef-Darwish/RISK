@@ -13,14 +13,12 @@ public class Country {
 
     public Country(int id) {
         this.id = id;
+        this.units = 0;
         this.neighbours = new ArrayList<>();
     }
+
     public int getId() {
         return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public Player getOccupant() {
@@ -49,10 +47,6 @@ public class Country {
 
     public List<Country> getNeighbours() {
         return neighbours;
-    }
-
-    public void setNeighbours(List<Country> neighbours) {
-        this.neighbours = neighbours;
     }
 
     public void addNeighbour(Country neighbour) {

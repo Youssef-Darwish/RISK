@@ -14,11 +14,9 @@ public class Continent {
         this.countries = new ArrayList<>();
     }
 
-
     public int getId() {
         return id;
     }
-
 
     public List<Country> getCountries() {
         return countries;
