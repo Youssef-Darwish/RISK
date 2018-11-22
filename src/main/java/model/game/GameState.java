@@ -36,7 +36,7 @@ public class GameState {
     private Player currentPlayer, opponentPlayer;
 
     public GameState(GameState gameState) {
-        // TODO: Creates a new game state by copying given game state (deep copy).
+        // TODO: Creates a new game state by copying given game state (deep copy). -> Copy constructor
     }
 
     public GameState(String inputFileName){
@@ -131,6 +131,9 @@ public class GameState {
         return currentPlayer;
     }
 
+    public Player getOpponentPlayer(){
+        return opponentPlayer;
+    }
 
     public void setWorld(WorldMap world) {
         this.world = world;
@@ -140,6 +143,9 @@ public class GameState {
         this.currentPlayer = currentPlayer;
     }
 
+    public void setOpponentPlayer(Player player){
+        opponentPlayer = player;
+    }
 
     public List<GameState> getNextStates(){
         return null;
@@ -153,5 +159,4 @@ public class GameState {
         // Returns true if this game state is a final game state (a player has won the game by conquering all countries)
         return true;
     }
-
 }

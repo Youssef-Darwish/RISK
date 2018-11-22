@@ -14,11 +14,13 @@ public class Player {
     private List<Country> conqueredCountries;
     private List<Continent> conqueredContinents;
 
+    //TODO : logic and order of calculating bonus armies ( next & current)
     public Player(int id) {
         this.id = id;
         this.lastTurnBonusUnits = 0;
         this.conqueredCountries = new ArrayList<>();
         this.conqueredContinents = new ArrayList<>();
+
     }
 
     public int getId() {
@@ -92,6 +94,7 @@ public class Player {
     public int getTurnBonus(){
         // At the start of each turn, the palyer gets a bonus = 2 per each continent + # of conquered countries / 3 + bonus from last turn conquests.
         return (2 * conqueredContinents.size()) + (int)max(3, floor(conqueredCountries.size() / 3)) + lastTurnBonusUnits;
+
     }
 
     @Override
@@ -105,5 +108,15 @@ public class Player {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+
+    //TODO implement / decide : canAttack in Player Class or State Class
+    //Done in country Class
+
+
+    //TODO implement / discuss logic
+    public void attack(Country country){
+
     }
 }
