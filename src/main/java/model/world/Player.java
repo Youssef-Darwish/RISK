@@ -8,7 +8,6 @@ import static java.lang.Math.floor;
 import static java.lang.Math.max;
 
 public class Player {
-
     private int id;
     private int lastTurnBonusUnits;
     private List<Country> conqueredCountries;
