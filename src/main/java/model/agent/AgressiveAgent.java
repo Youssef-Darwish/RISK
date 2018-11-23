@@ -39,6 +39,8 @@ public class AgressiveAgent implements Agent {
         country.setUnits(country.getUnits()+agentPlayer.getTurnBonus());
         List<Continent> continents = agentPlayer.getConqueredContinents();
 
+        //TODO : attacked or not ? boolean to know turn bonus
+        //TODO : add function to update conqueredContinents
 
         // if the opponent has conquered continents
         if (continents.size()!=0){

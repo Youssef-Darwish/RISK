@@ -2,7 +2,7 @@ package main.java.model.world;
 
 import java.util.List;
 
-public class Country {
+public class Country implements Comparable<Country>{
 
     private int id;
     private Player occupant;
@@ -37,7 +37,7 @@ public class Country {
         this.continent = continent;
     }
 
-    public int getUnits() {
+    public Integer getUnits() {
         return units;
     }
 
@@ -71,4 +71,8 @@ public class Country {
         }
     }
 
+    @Override
+    public int compareTo(Country o) {
+        return this.getUnits().compareTo(o.getUnits());
+    }
 }
