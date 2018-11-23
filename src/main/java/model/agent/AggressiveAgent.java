@@ -62,7 +62,7 @@ public class AggressiveAgent implements Agent {
                 }
                 // loop , can attack ? attack
             }
-        }else {
+        } else {
 
             //repeated code : pack it in one function
             //we may return the nearest conquered as list

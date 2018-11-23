@@ -8,15 +8,8 @@ import main.java.model.world.Country;
 import main.java.model.world.Player;
 import main.java.model.world.WorldMap;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+
 
 /**
  * A GameState specifies the full game state, including the continents, capsules,
@@ -37,6 +30,7 @@ public class GameState {
 
     public GameState(GameState gameState) {
         // TODO: Creates a new game state by copying given game state (deep copy). -> Copy constructor
+
     }
 
     public GameState(String inputFileName){
@@ -156,13 +150,17 @@ public class GameState {
     }
 
     public boolean isFinalState() {
-        // Returns true if this game state is a final game state (a player has won the game by conquering all countries)
-        return true;
+        return this.currentPlayer.getConqueredCountries().size() == this.world.getCountries().size()
+                || this.opponentPlayer.getConqueredCountries().size() == this.world.getCountries().size();
     }
 
     public Player getWinner() {
         if (isFinalState()) {
-            return this.opponentPlayer; // could change depending on implementation of isFinalState
+            if (this.currentPlayer.getConqueredCountries().size() == this.world.getCountries().size()) {
+                return this.currentPlayer; // This is to handle an initial placement of the world with a winner already.
+            } else {
+                return this.opponentPlayer;
+            }
         }
         return null; // Or maybe throw an exception as there isn't a winner yet
     }
