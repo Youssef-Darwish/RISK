@@ -6,8 +6,14 @@ import main.java.model.world.Country;
 import org.graphstream.graph.EdgeRejectedException;
 import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.SingleGraph;
+import org.graphstream.ui.graphicGraph.GraphicGraph;
 import org.graphstream.ui.swingViewer.ViewPanel;
+import org.graphstream.ui.view.View;
 import org.graphstream.ui.view.Viewer;
+import org.graphstream.ui.view.util.DefaultMouseManager;
+import org.graphstream.ui.view.util.MouseManager;
+
+import java.awt.event.MouseEvent;
 
 public class GraphView extends SingleGraph {
     private Viewer viewer;
@@ -29,6 +35,17 @@ public class GraphView extends SingleGraph {
 
     public SwingNode getViewNode() {
         ViewPanel viewPanel = this.viewer.addDefaultView(false);
+        viewPanel.setMouseManager(new DefaultMouseManager() {
+            @Override public void init(GraphicGraph graph, View view) { }
+            @Override public void release() { }
+            @Override public void mouseClicked(MouseEvent mouseEvent) { }
+            @Override public void mousePressed(MouseEvent mouseEvent) { }
+            @Override public void mouseReleased(MouseEvent mouseEvent) { }
+            @Override public void mouseEntered(MouseEvent mouseEvent) { }
+            @Override public void mouseExited(MouseEvent mouseEvent) { }
+            @Override public void mouseDragged(MouseEvent mouseEvent) { }
+            @Override public void mouseMoved(MouseEvent mouseEvent) { }
+        });
         SwingNode node = new SwingNode();
         node.setContent(viewPanel);
         return node;
@@ -36,7 +53,6 @@ public class GraphView extends SingleGraph {
 
     public static GraphView fromGameState(final GameState gameState) {
         GraphView graphView = new GraphView("World Map");
-        graphView.getNodeSet().clear();
         // Add first player nodes to graph
         for (Country country : gameState.getWorld().getPlayerOne().getConqueredCountries()) {
             Node countryNode = graphView.addNode(String.valueOf(country.getId()));

@@ -35,6 +35,7 @@ public class ViewController {
         this.agent1 = new AggressiveAgent();
         this.agent2 = new PassiveAgent();
         this.curGameState = new GameState(FILE_NAME);
+
     }
 
     private void initGraphStream() {

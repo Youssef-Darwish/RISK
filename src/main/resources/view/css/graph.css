@@ -6,13 +6,13 @@ node {
 }
 
 node.player1 {
-    fill-color: #009688;
-    text-color: white;
+    fill-color: #9AB7AF;
+    text-color: black;
 }
 
 node.player2 {
-    fill-color: #d32f2f;
-    text-color: white;
+    fill-color: #DDBDA9;
+    text-color: black;
 }
 
 node.unoccupied {
@@ -26,4 +26,9 @@ edge {
     text-color: red;
     text-background-mode: plain;
     shape: cubic-curve;
+}
+
+graph {
+    fill-mode: image-scaled-ratio-max;
+    fill-image: url('main/resources/view/assets/world_1200_800.jpeg');
 }
