@@ -22,8 +22,6 @@ public class NearlyPacifistAgent implements Agent {
     @Override
     public GameState getNextState(GameState currentState) {
 
-        //TODO : replace new with copy of GameState
-
         newState = currentState.copy();
         agentPlayer = currentState.getCurrentPlayer();
         Country country = agentPlayer.getWeakestCountry();
@@ -41,20 +39,23 @@ public class NearlyPacifistAgent implements Agent {
                     neighbourCountry.setUnits(1);   //leave 1 unit in the attacking country
                     weakestCountry.setUnits(diff-1);     // move the rest to the attacked country
                     weakestCountry.setOccupant(agentPlayer); //update occupant
+                    agentPlayer.addCountry(weakestCountry);  // add country to player's countries
 
                     //TODO : update conquered continents
+
                     attacked = true;
                     break;
                 }
             }
         }
 
+        //update Bonus Units
+
         if (attacked){
             agentPlayer.setlastTurnBonusUnits(2);
         }else {
             agentPlayer.setlastTurnBonusUnits(0);
         }
-
         // switch players
         newState.setCurrentPlayer(currentState.getOpponentPlayer());
         newState.setOpponentPlayer(currentState.getCurrentPlayer());

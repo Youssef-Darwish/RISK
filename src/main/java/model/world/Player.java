@@ -47,6 +47,9 @@ public class Player {
     public void setConqueredCountries(List<Country> conqueredCountries) {
         this.conqueredCountries = conqueredCountries;
     }
+    public void addCountry(Country country){
+        conqueredCountries.add(country);
+    }
 
     public void setConqueredContinents(List<Continent> conqueredContinents) {
         this.conqueredContinents = conqueredContinents;

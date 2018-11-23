@@ -37,16 +37,18 @@ public class AgressiveAgent implements Agent {
         agentPlayer = currentState.getCurrentPlayer();
         Country country = agentPlayer.getMostFortifiedCountry();
         country.setUnits(country.getUnits()+agentPlayer.getTurnBonus());
-        List<Continent> continents = agentPlayer.getConqueredContinents();
+        List<Continent> conqueredContinents = agentPlayer.getConqueredContinents();
 
-        //TODO : attacked or not ? boolean to know turn bonus
+
         //TODO : add function to update conqueredContinents
 
+        boolean attacked = false;
         // if the opponent has conquered continents
-        if (continents.size()!=0){
+        if (conqueredContinents.size()!=0){
 
-            for (Continent continent : continents){
+            for (Continent continent : conqueredContinents){
 
+                // The aggressive Agent attempts to attack the most fortified country of the opponent
                 Country strongest = continent.getMostFortifiedCountry();
                 List<Country> neighbours = strongest.getNeighbours();
 
@@ -57,11 +59,12 @@ public class AgressiveAgent implements Agent {
                         neighbourCountry.setUnits(1);   //leave 1 unit in the attacking country
                         strongest.setUnits(diff-1);     // move the rest to the attacked country
                         strongest.setOccupant(agentPlayer); //update occupant
+                        agentPlayer.addCountry(strongest);  // add country in player's conquered country
 
                         // update conquered continents
-                        agentPlayer.setlastTurnBonusUnits(2);
-
-
+                        currentState.getOpponentPlayer().getConqueredContinents().remove(continent);
+                        attacked = true;
+                        break;
                     }
                 }
                 // loop , can attack ? attack
@@ -84,12 +87,20 @@ public class AgressiveAgent implements Agent {
                     strongest.setOccupant(agentPlayer); //update occupant
 
                     // update conquered continents
-                    agentPlayer.setlastTurnBonusUnits(2);
 
                 //TODO : Incomplete Logic
 
                 }
             }
+        }
+
+
+        // update bonus : attacked or not
+        if (attacked){
+            agentPlayer.setlastTurnBonusUnits(2);
+        }
+        else{
+            agentPlayer.setlastTurnBonusUnits(0);
         }
 
         return newState;

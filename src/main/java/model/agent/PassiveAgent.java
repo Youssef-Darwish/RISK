@@ -11,7 +11,6 @@ public class PassiveAgent implements Agent {
 
     //TODO Agent : singleton ?
 
-    // move the needed function in Player Class to state class ? and call them by ID ?
     public PassiveAgent(){
 
     }
@@ -29,7 +28,6 @@ public class PassiveAgent implements Agent {
         newState.setCurrentPlayer(currentState.getOpponentPlayer());
         newState.setOpponentPlayer(currentState.getCurrentPlayer());
 
-        // update bonus points
         return newState;
     }
 }

@@ -72,7 +72,7 @@ public class Country implements Comparable<Country>{
     }
 
     @Override
-    public int compareTo(Country o) {
-        return this.getUnits().compareTo(o.getUnits());
+    public int compareTo(Country country) {
+        return this.getUnits().compareTo(country.getUnits());
     }
 }

@@ -3,7 +3,7 @@ package main.java.model.world;
 import java.util.List;
 
 public class Continent {
-    public Continent(List<Integer> countriesIds) {
+    public Continent(List<Integer> countriesIds, int bonus) {
         //TODO
     }
 
@@ -72,5 +72,5 @@ public class Continent {
 
 
 //TODO : add comparator :
-//compare continents : owned by oppnent : put first ,
+//compare continents : owned by opponent : put first ,
 //else : sort by number of countries owned by opponent
