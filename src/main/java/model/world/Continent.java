@@ -1,7 +1,9 @@
 package main.java.model.world;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Continent {
     private int id;
@@ -14,12 +16,16 @@ public class Continent {
         this.countries = new ArrayList<>();
     }
 
-    public int getId() {
-        return id;
+    public List<Country> getCountries() {
+        return this.countries;
     }
 
-    public List<Country> getCountries() {
-        return countries;
+    public List<Country> getCountries(Comparator<Country> comparator) {
+        return comparator == null ? this.countries : this.countries.stream().sorted(comparator).collect(Collectors.toList());
+    }
+
+    public int getId() {
+        return id;
     }
 
     public void addCountry(Country country) {
@@ -63,9 +69,14 @@ public class Continent {
         return countries.get(maxIndex);
     }
 
+    public int getSize() {
+        return this.countries.size();
+    }
+
+    public List<Country> getUnconqueredCountries(Player agentPlayer, Comparator<Country> comparator) {
+        return this.countries.stream()
+                .filter(continent -> !agentPlayer.getConqueredContinents().contains(continent))
+                .sorted(comparator)
+                .collect(Collectors.toList());
+    }
 }
-
-
-//TODO : add comparator :
-//compare continents : owned by oppnent : put first ,
-//else : sort by number of countries owned by opponent

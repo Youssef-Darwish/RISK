@@ -8,6 +8,7 @@ import main.java.model.world.Country;
 import main.java.model.world.Player;
 import main.java.model.world.WorldMap;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -198,5 +199,17 @@ public class GameState implements Cloneable {
                 clone.addConqueredContinent(this.world.getContinentById(id)));
         clone.setLastTurnBonusUnits(currentPlayer.getLastTurnBonusUnits());
         return clone;
+    }
+
+    public List<Country> getUnoccupiedCountries(Player player) {
+        return this.world.getUnoccupiedCountries(player);
+    }
+
+    public List<Continent> getUnoccupiedContinents() {
+        return this.world.getUnoccupiedContinents();
+    }
+
+    public List<Continent> getUnconqueredContinents(Player player, Comparator<Continent> comparator) {
+        return this.world.getUnconqueredContinents(player, comparator);
     }
 }

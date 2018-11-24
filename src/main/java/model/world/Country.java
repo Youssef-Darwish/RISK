@@ -60,16 +60,8 @@ public class Country implements Comparable<Country>{
     }
 
     public boolean canAttack(Country country){
-        if (country.getOccupant().equals(this.occupant) ||
-                !this.neighbours.contains(country)){
-            return  false;
-        }
-        else if (this.getUnits()-country.getUnits()>1){
-            return false;
-        }
-        else {
-            return true;
-        }
+        return this.hasOccupant() && !country.getOccupant().equals(this.occupant) &&
+                this.neighbours.contains(country) && (this.getUnits() - country.getUnits() > 1);
     }
 
     @Override

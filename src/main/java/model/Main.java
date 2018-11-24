@@ -13,13 +13,12 @@ public class Main {
 
     public static void main(String[] args) {
         // Both agents and filename are taken as input (probably using GUI)
-//        Agent passiveAgent = new PassiveAgent();
-//        Agent aggressiveAgent = new AggressiveAgent();
-//        String fileName = "./risk_game.txt";
-//
-//        GameState initGameState = new GameState(fileName);
-//        Game.getInstance().play(initGameState, aggressiveAgent, passiveAgent);
-        testClone(args);
+        Agent passiveAgent = new PassiveAgent();
+        Agent aggressiveAgent = new AggressiveAgent();
+        String fileName = "./risk_game.txt";
+
+        GameState initGameState = new GameState(fileName);
+        Game.getInstance().play(initGameState, aggressiveAgent, passiveAgent);
     }
 
     private static void testClone(String[] args) {
@@ -48,5 +47,4 @@ public class Main {
         System.out.println(clonedGameState.toString());
 
     }
-
 }

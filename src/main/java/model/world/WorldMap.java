@@ -109,9 +109,11 @@ public class WorldMap implements Cloneable {
     }
 
     public Country getLeastFortifiedCountry(Player player) {
+        // Returns least fortified country unoccupied or occupied by "player"
         return this.countries.stream()
                 .filter(country -> !country.hasOccupant() || country.getOccupant().equals(player))
-                .sorted(Comparator.comparing(Country::getUnits)).collect(toList()).get(0);
+                .sorted(Comparator.comparing(Country::getUnits))
+                .collect(Collectors.toList()).get(0);
     }
 
     @Override
@@ -132,5 +134,27 @@ public class WorldMap implements Cloneable {
                         clone.addEdgeDirected(country.getId(), neighbor.getId())));
 
         return clone;
+    }
+
+    public List<Country> getUnoccupiedCountries(Player player) {
+        // Returns a list of countries that are unoccupied by "player" sorted by number of units, ties broken using ids.
+        return this.countries.stream()
+                .filter(country -> !country.hasOccupant() || !country.getOccupant().equals(player))
+                .sorted(Comparator.comparing(Country::getUnits))
+                .collect(Collectors.toList());
+    }
+
+
+    public List<Continent> getUnoccupiedContinents() {
+        return this.continents.stream()
+                .filter(continent -> !playerOne.getConqueredContinents().contains(continent))
+                .collect(Collectors.toList());
+    }
+
+    public List<Continent> getUnconqueredContinents(Player player, Comparator<Continent> comparator) {
+        return this.continents.stream()
+                .filter(continent -> !player.getConqueredContinents().contains(continent))
+                .sorted(comparator)
+                .collect(Collectors.toList());
     }
 }

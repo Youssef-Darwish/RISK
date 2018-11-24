@@ -2,6 +2,7 @@ package main.java.model.agents;
 
 import main.java.model.Agent;
 import main.java.model.game.GameState;
+import main.java.model.world.Continent;
 import main.java.model.world.Country;
 import main.java.model.world.Player;
 
@@ -10,52 +11,59 @@ import java.util.List;
 
 public class NearlyPacifistAgent implements Agent {
 
-    private GameState newState ;
-    private Player agentPlayer;
-
-    //TODO Agent : singleton ?
-
     public NearlyPacifistAgent(){
 
     }
 
     @Override
     public GameState getNextState(GameState currentState) {
+        GameState newState = new GameState(currentState);
 
-        newState = new GameState(currentState);
-        agentPlayer = currentState.getCurrentPlayer();
-        Country country = agentPlayer.getWeakestCountry();
-        country.setUnits(country.getUnits() + agentPlayer.getTurnAdditionalUnits());
+        // Placing additional units like a passive agent
+        Player agentPlayer = currentState.getCurrentPlayer();
+        Country leastFortifiedCountry = currentState.getLeastFortifiedCountry(agentPlayer);
+        leastFortifiedCountry.setUnits(leastFortifiedCountry.getUnits() + agentPlayer.getTurnAdditionalUnits());
+        if (!leastFortifiedCountry.hasOccupant()) {
+            leastFortifiedCountry.setOccupant(agentPlayer);
+            agentPlayer.addConqueredCountry(leastFortifiedCountry);
 
-        List<Country> opponentsCountries = currentState.getOpponentPlayer().getConqueredCountries();
-        Collections.sort(opponentsCountries);
+            // Check if this country formed a continent
+            Continent continent = leastFortifiedCountry.getContinent();
+            if (continent.isConquered(agentPlayer)) {
+                agentPlayer.addConqueredContinent(continent);
+            }
+        }
 
+        // Attacking a country(if possible) such that the agent loses the fewest possible # of units.
         boolean attacked = false;
-        for (Country weakestCountry : opponentsCountries){
-            for (Country neighbourCountry : weakestCountry.getNeighbours()){
-                if (neighbourCountry.canAttack(weakestCountry)){
-                    // update country units + update occupant + update conqueredContinents + updateBonusPoints
-                    int diff = neighbourCountry.getUnits()-weakestCountry.getUnits();
-                    neighbourCountry.setUnits(1);   //leave 1 unit in the attacking country
-                    weakestCountry.setUnits(diff-1);     // move the rest to the attacked country
-                    weakestCountry.setOccupant(agentPlayer); //update occupant
-                    agentPlayer.addConqueredCountry(weakestCountry);  // add country to player's countries
+        for (Country unconqueredCountry : currentState.getUnoccupiedCountries(agentPlayer)) {
+            for (Country neighbour : unconqueredCountry.getNeighbours()) {
+                if (neighbour.hasOccupant() && neighbour.getOccupant().equals(agentPlayer) && neighbour.canAttack(unconqueredCountry)) {
+                    // Move units, assumption: when attacking, only leave 1 unit behind and attack with the rest
+                    int unitsToMove = neighbour.getUnits() - unconqueredCountry.getUnits() - 1;
+                    unconqueredCountry.setUnits(unitsToMove);
+                    neighbour.setUnits(1);
 
-                    //TODO : update conquered continents
+                    // Modify country and player
+                    unconqueredCountry.setOccupant(agentPlayer);
+                    agentPlayer.addConqueredCountry(unconqueredCountry);
 
+                    // Check if continent is now conquered
+                    Continent continent = unconqueredCountry.getContinent();
+                    if (continent.isConquered(agentPlayer)) {
+                        agentPlayer.addConqueredContinent(continent);
+                    }
                     attacked = true;
                     break;
                 }
             }
+            if (attacked)
+                break;
         }
 
-        //update Bonus Units
+        // Update Bonus Units for next turn
+        agentPlayer.setLastTurnBonusUnits(attacked ? 2 : 0);
 
-        if (attacked){
-            agentPlayer.setLastTurnBonusUnits(2);
-        }else {
-            agentPlayer.setLastTurnBonusUnits(0);
-        }
         // switch players
         newState.setCurrentPlayer(currentState.getOpponentPlayer());
         newState.setOpponentPlayer(currentState.getCurrentPlayer());
