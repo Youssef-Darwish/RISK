@@ -1,8 +1,11 @@
 package main.java.model.world;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import static java.lang.Math.floor;
 import static java.lang.Math.max;
@@ -43,7 +46,11 @@ public class Player {
     }
 
     public List<Continent> getConqueredContinents() {
-        return conqueredContinents;
+        return this.conqueredContinents;
+    }
+
+    public List<Continent> getConqueredContinents(Comparator<Continent> comparator) {
+        return comparator == null ? this.conqueredContinents : this.conqueredContinents.stream().sorted(comparator).collect(Collectors.toList());
     }
 
     public void addConqueredContinent(Continent continent) {
@@ -59,17 +66,9 @@ public class Player {
     }
 
     public Country getMostFortifiedCountry(){
-        Country mostFortifiedCountry =  this.getConqueredCountries().get(0);
-        int maxUnits = mostFortifiedCountry.getUnits();
-
-        for (Country c:this.getConqueredCountries()){
-            if(c.getUnits()>maxUnits){
-                mostFortifiedCountry = c;
-                maxUnits = c.getUnits();
-            }
-        }
-        return mostFortifiedCountry;
-        // loop and get the max number of armies in countries
+        return this.conqueredCountries.stream()
+                .sorted(Comparator.comparing(Country::getUnits).reversed())
+                .collect(Collectors.toList()).get(0);
     }
 
     public Country getWeakestCountry(){

@@ -5,102 +5,58 @@ import main.java.model.world.Continent;
 import main.java.model.world.Country;
 import main.java.model.world.Player;
 
+import java.util.Comparator;
 import java.util.List;
 
 public class AggressiveAgent implements Agent {
-    private GameState newState ;
-    private Player agentPlayer;
-
     // move the needed function in Player Class to state class ? and call them by ID ?
-    public AggressiveAgent(){
-
-
-    }
+    public AggressiveAgent() { }
 
     @Override
     public GameState getNextState(GameState currentState) {
+        GameState newState = new GameState(currentState);
+        Player agentPlayer = currentState.getCurrentPlayer();
 
-        //Steps for aggressive Agent
-        //  0-add units on the most fortified country  -> OK
-        //  1-get conquered continents                 -> OK
-        //  2-for each continent:
-        //  3-get most fortified country
-        //  4-if (canAttack) --> attack
-        //  5-else : got to 3
-        //  6-if opponentPlayer.getConqueredContinents.size==0
-        //  7-get weakest country                       -->some issues in loop
-        //  8-if (canAttack) -->attack
-        //  9-else : go to 7
+        // Place additional units on the vertex with the most units
+        Country mostFortifiedCountry = agentPlayer.getMostFortifiedCountry();
+        mostFortifiedCountry.setUnits(mostFortifiedCountry.getUnits() + agentPlayer.getTurnAdditionalUnits());
 
-        newState = new GameState(currentState);
-        agentPlayer = currentState.getCurrentPlayer();
-        Country country = agentPlayer.getMostFortifiedCountry();
-        country.setUnits(country.getUnits()+agentPlayer.getTurnAdditionalUnits());
-        List<Continent> conqueredContinents = agentPlayer.getConqueredContinents();
-
-
-        //TODO : add function to update conqueredContinents
-
+        // greedily attempts to attack so as to cause the most damage - i.e. to prevent its opponent getting a continent bonus (the largest possible).
         boolean attacked = false;
-        // if the opponent has conquered continents
-        if (conqueredContinents.size()!=0){
 
-            for (Continent continent : conqueredContinents){
+        for (Continent continent : currentState.getUnconqueredContinents(agentPlayer, Comparator.comparing(Continent::getContinentBonus))) {
+            for (Country country : continent.getUnconqueredCountries(agentPlayer, Comparator.comparing(Country::getUnits).reversed())) {
+                for (Country neighbour : country.getNeighbours()) {
+                    if (neighbour.hasOccupant() && neighbour.getOccupant().equals(agentPlayer) && neighbour.canAttack(country)) {
+                        // Move units, assumption: when attacking, only leave 1 unit behind and attack with the rest
+                        int unitsToMove = neighbour.getUnits() - country.getUnits() - 1;
+                        country.setUnits(unitsToMove);
+                        neighbour.setUnits(1);
 
-                // The aggressive Agent attempts to attack the most fortified country of the opponent
-                Country strongest = continent.getMostFortifiedCountry();
-                List<Country> neighbours = strongest.getNeighbours();
+                        // Modify country and player
+                        country.setOccupant(agentPlayer);
+                        agentPlayer.addConqueredCountry(country);
 
-                for (Country neighbourCountry : neighbours){
-                    if (neighbourCountry.canAttack(strongest)){
-                        // update country units + update occupant + update conqueredContinents + updateBonusPoints
-                        int diff = neighbourCountry.getUnits()-strongest.getUnits();
-                        neighbourCountry.setUnits(1);   //leave 1 unit in the attacking country
-                        strongest.setUnits(diff-1);     // move the rest to the attacked country
-                        strongest.setOccupant(agentPlayer); //update occupant
-                        agentPlayer.addConqueredCountry(strongest);  // add country in player's conquered country
-
-                        // update conquered continents
-                        currentState.getOpponentPlayer().getConqueredContinents().remove(continent);
+                        // Check if continent is now conquered
+                        if (continent.isConquered(agentPlayer)) {
+                            agentPlayer.addConqueredContinent(continent);
+                        }
                         attacked = true;
                         break;
                     }
                 }
-                // loop , can attack ? attack
+                if (attacked)
+                    break;
             }
-        }else {
-
-            //repeated code : pack it in one function
-            //we may return the nearest conquered as list
-            Continent continent = agentPlayer.getNearestConqueredContinent();
-
-            Country strongest = continent.getMostFortifiedCountry();
-            List<Country> neighbours = strongest.getNeighbours();
-
-            for (Country neighbourCountry : neighbours){
-                if (neighbourCountry.canAttack(strongest)){
-                    // update country units + update occupant + update conqueredContinents + updateBonusPoints
-                    int diff = neighbourCountry.getUnits()-strongest.getUnits();
-                    neighbourCountry.setUnits(1);   //leave 1 unit in the attacking country
-                    strongest.setUnits(diff-1);     // move the rest to the attacked country
-                    strongest.setOccupant(agentPlayer); //update occupant
-
-                    // update conquered continents
-
-                    //TODO : Incomplete Logic
-
-                }
-            }
+            if (attacked)
+                break;
         }
 
+        agentPlayer.setLastTurnBonusUnits(attacked ? 2 : 0);
 
-        // update bonus : attacked or not
-        if (attacked){
-            agentPlayer.setLastTurnBonusUnits(2);
-        }
-        else{
-            agentPlayer.setLastTurnBonusUnits(0);
-        }
+        // switch players
+        newState.setCurrentPlayer(currentState.getOpponentPlayer());
+        newState.setOpponentPlayer(currentState.getCurrentPlayer());
 
         return newState;
     }

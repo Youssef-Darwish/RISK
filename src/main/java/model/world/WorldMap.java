@@ -117,4 +117,18 @@ public class WorldMap {
                 .sorted(Comparator.comparing(Country::getUnits))
                 .collect(Collectors.toList());
     }
+
+
+    public List<Continent> getUnoccupiedContinents() {
+        return this.continents.stream()
+                .filter(continent -> !playerOne.getConqueredContinents().contains(continent))
+                .collect(Collectors.toList());
+    }
+
+    public List<Continent> getUnconqueredContinents(Player player, Comparator<Continent> comparator) {
+        return this.continents.stream()
+                .filter(continent -> !player.getConqueredContinents().contains(continent))
+                .sorted(comparator)
+                .collect(Collectors.toList());
+    }
 }
