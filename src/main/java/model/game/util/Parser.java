@@ -34,6 +34,7 @@ public class Parser {
     public int getEdgesNumber() {
         return Integer.parseInt(fileLines.get(1).trim().split("\\s+")[1]);
     }
+
     public int getContinentsNumber() {
         return Integer.parseInt(fileLines.get(2 + getEdgesNumber()).trim().split("\\s+")[1]);
     }
