@@ -1,7 +1,6 @@
 package main.java.model.game.util;
 
 import javafx.util.Pair;
-import scala.Int;
 
 import java.io.BufferedReader;
 import java.io.IOException;

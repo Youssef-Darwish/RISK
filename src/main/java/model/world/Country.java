@@ -3,7 +3,7 @@ package main.java.model.world;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Country {
+public class Country implements Comparable<Country>{
 
     private int id;
     private Player occupant;
@@ -15,6 +15,7 @@ public class Country {
         this.id = id;
         this.units = 0;
         this.neighbours = new ArrayList<>();
+        this.occupant = null;
     }
 
     public int getId() {
@@ -37,7 +38,7 @@ public class Country {
         this.continent = continent;
     }
 
-    public int getUnits() {
+    public Integer getUnits() {
         return units;
     }
 
@@ -53,6 +54,9 @@ public class Country {
         this.neighbours.add(neighbour);
     }
 
+    public boolean hasOccupant() {
+        return this.occupant != null;
+    }
 
     public boolean canAttack(Country country){
         if (country.getOccupant().equals(this.occupant) ||
@@ -67,4 +71,8 @@ public class Country {
         }
     }
 
+    @Override
+    public int compareTo(Country o) {
+        return this.getUnits().compareTo(o.getUnits());
+    }
 }

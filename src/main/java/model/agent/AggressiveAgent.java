@@ -5,7 +5,6 @@ import main.java.model.world.Continent;
 import main.java.model.world.Country;
 import main.java.model.world.Player;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class AggressiveAgent implements Agent {
@@ -14,6 +13,8 @@ public class AggressiveAgent implements Agent {
 
     // move the needed function in Player Class to state class ? and call them by ID ?
     public AggressiveAgent(){
+
+
     }
 
     @Override
@@ -34,15 +35,19 @@ public class AggressiveAgent implements Agent {
         newState = new GameState(currentState);
         agentPlayer = currentState.getCurrentPlayer();
         Country country = agentPlayer.getMostFortifiedCountry();
-        country.setUnits(country.getUnits()+agentPlayer.getTurnBonus());
-        List<Continent> continents = agentPlayer.getConqueredContinents();
+        country.setUnits(country.getUnits()+agentPlayer.getTurnAdditionalUnits());
+        List<Continent> conqueredContinents = agentPlayer.getConqueredContinents();
 
 
+        //TODO : add function to update conqueredContinents
+
+        boolean attacked = false;
         // if the opponent has conquered continents
-        if (continents.size()!=0){
+        if (conqueredContinents.size()!=0){
 
-            for (Continent continent : continents){
+            for (Continent continent : conqueredContinents){
 
+                // The aggressive Agent attempts to attack the most fortified country of the opponent
                 Country strongest = continent.getMostFortifiedCountry();
                 List<Country> neighbours = strongest.getNeighbours();
 
@@ -53,11 +58,12 @@ public class AggressiveAgent implements Agent {
                         neighbourCountry.setUnits(1);   //leave 1 unit in the attacking country
                         strongest.setUnits(diff-1);     // move the rest to the attacked country
                         strongest.setOccupant(agentPlayer); //update occupant
+                        agentPlayer.addConqueredCountry(strongest);  // add country in player's conquered country
 
                         // update conquered continents
-                        agentPlayer.setLastTurnBonusUnits(2);
-
-
+                        currentState.getOpponentPlayer().getConqueredContinents().remove(continent);
+                        attacked = true;
+                        break;
                     }
                 }
                 // loop , can attack ? attack
@@ -80,12 +86,20 @@ public class AggressiveAgent implements Agent {
                     strongest.setOccupant(agentPlayer); //update occupant
 
                     // update conquered continents
-                    agentPlayer.setLastTurnBonusUnits(2);
 
                     //TODO : Incomplete Logic
 
                 }
             }
+        }
+
+
+        // update bonus : attacked or not
+        if (attacked){
+            agentPlayer.setLastTurnBonusUnits(2);
+        }
+        else{
+            agentPlayer.setLastTurnBonusUnits(0);
         }
 
         return newState;
