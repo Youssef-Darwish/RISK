@@ -1,9 +1,13 @@
-package main.java.model.agent;
+package main.java.model;
 
 public abstract class SearchAgent implements Agent {
-    protected Heuristic heuristic;
+    private Heuristic heuristic;
 
     public SearchAgent(Heuristic heuristic) {
         this.heuristic = heuristic;
+    }
+
+    public Heuristic getHeuristic() {
+        return heuristic;
     }
 }

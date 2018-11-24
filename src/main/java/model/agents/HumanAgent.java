@@ -1,4 +1,4 @@
-package main.java.model.agent;
+package main.java.model.agents;
 
 import main.java.model.game.GameState;
 

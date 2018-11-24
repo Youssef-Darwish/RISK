@@ -1,8 +1,7 @@
 package main.java.model;
 
-import main.java.model.agent.Agent;
-import main.java.model.agent.AggressiveAgent;
-import main.java.model.agent.PassiveAgent;
+import main.java.model.agents.AggressiveAgent;
+import main.java.model.agents.PassiveAgent;
 import main.java.model.game.Game;
 import main.java.model.game.GameState;
 

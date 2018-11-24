@@ -1,5 +1,6 @@
-package main.java.model.agent;
+package main.java.model.agents;
 
+import main.java.model.Agent;
 import main.java.model.game.GameState;
 import main.java.model.world.Continent;
 import main.java.model.world.Country;

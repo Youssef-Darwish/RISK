@@ -1,5 +1,7 @@
-package main.java.model.agent;
+package main.java.model.agents;
 
+import main.java.model.Heuristic;
+import main.java.model.SearchAgent;
 import main.java.model.game.GameState;
 
 public class RealTimeAStarAgent extends SearchAgent {

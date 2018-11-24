@@ -1,6 +1,6 @@
 package main.java.model.game;
 
-import main.java.model.agent.Agent;
+import main.java.model.Agent;
 
 public class Game {
     private static Game instance;
