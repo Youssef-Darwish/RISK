@@ -43,7 +43,7 @@ public class GameState {
     private void printStateToConsole() {
         System.out.println("World countries: ");
         for (Country country : this.world.getCountries()) {
-            System.out.println("Id: " + country.getId() + ", Occupant Id: " + country.getOccupant().getId() + ", Units in country: " + country.getUnits() + ", Continent Id: " + country.getContinent().getId());
+            System.out.println("Id: " + country.getId() + ", Occupant Id: " + (country.hasOccupant() ? country.getOccupant().getId() : -1) + ", Units in country: " + country.getUnits() + ", Continent Id: " + country.getContinent().getId());
             System.out.print("Neighbours ids: ");
             for (Country neighbour : country.getNeighbours()) {
                 System.out.print(neighbour.getId() + " ");

@@ -15,6 +15,7 @@ public class Country {
         this.id = id;
         this.units = 0;
         this.neighbours = new ArrayList<>();
+        this.occupant = null;
     }
 
     public int getId() {
@@ -53,6 +54,9 @@ public class Country {
         this.neighbours.add(neighbour);
     }
 
+    public boolean hasOccupant() {
+        return this.occupant != null;
+    }
 
     public boolean canAttack(Country country){
         if (country.getOccupant().equals(this.occupant) ||

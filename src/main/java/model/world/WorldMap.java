@@ -51,7 +51,7 @@ public class WorldMap {
         for (Continent continent : this.continents) {
             boolean conquered = true;
             for (Country country : continent.getCountries()) {
-                if (country.getOccupant() == null || !country.getOccupant().equals(this.playerOne)) {
+                if (!country.hasOccupant() || !country.getOccupant().equals(this.playerOne)) {
                     conquered = false;
                     break;
                 }
@@ -73,7 +73,7 @@ public class WorldMap {
         for (Continent continent : this.continents) {
             boolean conquered = true;
             for (Country country : continent.getCountries()) {
-                if (!country.getOccupant().equals(this.playerTwo)) {
+                if (!country.hasOccupant() || !country.getOccupant().equals(this.playerTwo)) {
                     conquered = false;
                     break;
                 }
