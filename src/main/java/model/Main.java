@@ -17,5 +17,4 @@ public class Main {
         GameState initGameState = new GameState(fileName);
         Game.getInstance().play(initGameState, aggressiveAgent, passiveAgent);
     }
-
 }

@@ -9,11 +9,6 @@ import java.util.List;
 
 public class NearlyPacifistAgent implements Agent {
 
-    private GameState newState ;
-    private Player agentPlayer;
-
-    //TODO Agent : singleton ?
-
     public NearlyPacifistAgent(){
 
     }
@@ -21,8 +16,8 @@ public class NearlyPacifistAgent implements Agent {
     @Override
     public GameState getNextState(GameState currentState) {
 
-        newState = new GameState(currentState);
-        agentPlayer = currentState.getCurrentPlayer();
+        GameState newState = new GameState(currentState);
+        Player agentPlayer = currentState.getCurrentPlayer();
         Country country = agentPlayer.getWeakestCountry();
         country.setUnits(country.getUnits() + agentPlayer.getTurnAdditionalUnits());
 

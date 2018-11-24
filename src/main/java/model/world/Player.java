@@ -91,9 +91,12 @@ public class Player {
     }
 
     public int getTurnAdditionalUnits(){
-        // At the start of each turn, the palyer gets a bonus = 2 per each continent + # of conquered countries / 3 + bonus from last turn conquests.
-        return (2 * conqueredContinents.size()) + (int)max(3, floor(conqueredCountries.size() / 3)) + lastTurnBonusUnits;
+        // At the start of each turn, the palyer gets a constant bonus for each continent + # of conquered countries / 3 + bonus from last turn conquests.
+        return getContinentsBonus() + (int)max(3, floor(conqueredCountries.size() / 3)) + lastTurnBonusUnits;
+    }
 
+    private int getContinentsBonus() {
+        return this.conqueredContinents.stream().mapToInt(Continent::getContinentBonus).sum();
     }
 
     @Override
