@@ -1,14 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.canvas.Canvas?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 
-<StackPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8.0.162-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.controller.ViewController">
-   <children>
-      <Canvas height="400.0" width="1200.0">
-         <StackPane.margin>
-            <Insets bottom="400.0" />
-         </StackPane.margin></Canvas>
-   </children>
-</StackPane>
+<BorderPane prefHeight="800.0" style="-fx-background-image: url(&quot;main/view/resources/assets/world_1200_800.jpeg&quot;);" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.controller.ViewController">
+   <center>
+      <StackPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" BorderPane.alignment="CENTER">
+         <children>
+            <Canvas height="800.0" width="1200.0">
+            </Canvas>
+         </children>
+      </StackPane>
+   </center>
+   <top>
+      <HBox fillHeight="false" prefHeight="25.0" prefWidth="200.0" style="-fx-background-color: #353535;" BorderPane.alignment="CENTER" />
+   </top>
+</BorderPane>

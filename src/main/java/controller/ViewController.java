@@ -2,9 +2,9 @@ package main.java.controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.layout.StackPane;
-import main.java.model.agent.Agent;
-import main.java.model.agent.AggressiveAgent;
-import main.java.model.agent.PassiveAgent;
+import main.java.model.Agent;
+import main.java.model.agents.AggressiveAgent;
+import main.java.model.agents.PassiveAgent;
 import main.java.model.game.Game;
 import main.java.model.game.GameState;
 import main.java.view.GraphView;
@@ -35,6 +35,7 @@ public class ViewController {
         this.agent1 = new AggressiveAgent();
         this.agent2 = new PassiveAgent();
         this.curGameState = new GameState(FILE_NAME);
+
     }
 
     private void initGraphStream() {
