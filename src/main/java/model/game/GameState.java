@@ -9,6 +9,7 @@ import main.java.model.world.Player;
 import main.java.model.world.WorldMap;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
@@ -23,7 +24,7 @@ import java.util.List;
  * can be used by agents to reason about the game.
  */
 
-public class GameState {
+public class GameState implements Cloneable {
 
     private WorldMap world;
     private Player currentPlayer, opponentPlayer;
@@ -36,59 +37,10 @@ public class GameState {
     public GameState(String inputFileName){
         this.world = new WorldMap();
         this.init(inputFileName);
-
-        this.printStateToConsole();
     }
 
-    private void printStateToConsole() {
-        System.out.println("World countries: ");
-        for (Country country : this.world.getCountries()) {
-            System.out.println("Id: " + country.getId() + ", Occupant Id: " + (country.hasOccupant() ? country.getOccupant().getId() : -1) + ", Units in country: " + country.getUnits() + ", Continent Id: " + country.getContinent().getId());
-            System.out.print("Neighbours ids: ");
-            for (Country neighbour : country.getNeighbours()) {
-                System.out.print(neighbour.getId() + " ");
-            }
-            System.out.println();
-        }
+    public GameState() {
 
-        System.out.println();
-        System.out.println("World continents: ");
-        for (Continent continent : this.world.getContinents()) {
-            System.out.println("Id: " + continent.getId() + ", bonus: " + continent.getContinentBonus());
-            System.out.print("Countries ids: ");
-            for (Country country : continent.getCountries()) {
-                System.out.print(country.getId() + " ");
-            }
-            System.out.println();
-        }
-
-        System.out.println();
-        System.out.println("Player 1:");
-        System.out.println("Id: " + this.world.getPlayerOne().getId() + ", last turn bonus: " + this.world.getPlayerOne().getLastTurnBonusUnits());
-        System.out.print("Occupied Countries: ");
-        for (Country country : this.world.getPlayerOne().getConqueredCountries()) {
-            System.out.print(country.getId() + " ");
-        }
-        System.out.println();
-        System.out.print("Occupied Continents: ");
-        for (Continent continent : this.world.getPlayerOne().getConqueredContinents()) {
-            System.out.print(continent.getId() + " ");
-        }
-        System.out.println();
-
-        System.out.println();
-        System.out.println("Player 2:");
-        System.out.println("Id: " + this.world.getPlayerTwo().getId() + ", last turn bonus: " + this.world.getPlayerTwo().getLastTurnBonusUnits());
-        System.out.print("Occupied Countries: ");
-        for (Country country : this.world.getPlayerTwo().getConqueredCountries()) {
-            System.out.print(country.getId() + " ");
-        }
-        System.out.println();
-        System.out.print("Occupied Continents: ");
-        for (Continent continent : this.world.getPlayerTwo().getConqueredContinents()) {
-            System.out.print(continent.getId() + " ");
-        }
-        System.out.println();
     }
 
     private void init(String inputFileName) {
@@ -106,6 +58,9 @@ public class GameState {
         // Creating continents
         int continentId = 0;
         for (List<Integer> continentSpecification : parser.getContinents()) {
+            continentSpecification = continentSpecification.stream().mapToInt(i -> i - 1)
+                    .boxed().collect(Collectors.toList());
+            continentSpecification.set(0, continentSpecification.get(0) + 1);
             this.world.addContinent(continentId++, continentSpecification);
         }
 
@@ -168,5 +123,80 @@ public class GameState {
 
     public Country getLeastFortifiedCountry(Player player) {
         return this.world.getLeastFortifiedCountry(player);
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("World countries: \n");
+        for (Country country : this.world.getCountries()) {
+            sb.append("Id: ").append(country.getId()).append(", Occupant Id: ").append(country.hasOccupant() ? country.getOccupant().getId() : -1).append(", Units in country: ").append(country.getUnits()).append(", Continent Id: ").append(country.getContinent().getId()).append("\n");
+            sb.append("Neighbours ids: ");
+            for (Country neighbour : country.getNeighbours()) {
+                sb.append(neighbour.getId()).append(" ");
+            }
+            sb.append("\n");
+        }
+
+        sb.append("\n");
+        sb.append("World continents: \n");
+        for (Continent continent : this.world.getContinents()) {
+            sb.append("Id: ").append(continent.getId()).append(", bonus: ").append(continent.getContinentBonus()).append("\n");
+            sb.append("Countries ids: ");
+            for (Country country : continent.getCountries()) {
+                sb.append(country.getId()).append(" ");
+            }
+            sb.append("\n");
+        }
+
+        sb.append("\n");
+        sb.append("Player 1:\n");
+        sb.append("Id: ").append(this.world.getPlayerOne().getId()).append(", last turn bonus: ").append(this.world.getPlayerOne().getLastTurnBonusUnits()).append("\n");
+        sb.append("Occupied Countries: ");
+        for (Country country : this.world.getPlayerOne().getConqueredCountries()) {
+            sb.append(country.getId()).append(" ");
+        }
+        sb.append("\n");
+        sb.append("Occupied Continents: ");
+        for (Continent continent : this.world.getPlayerOne().getConqueredContinents()) {
+            sb.append(continent.getId()).append(" ");
+        }
+        sb.append("\n");
+
+        sb.append("\n");
+        sb.append("Player 2:\n");
+        sb.append("Id: ").append(this.world.getPlayerTwo().getId()).append(", last turn bonus: ").append(this.world.getPlayerTwo().getLastTurnBonusUnits()).append("\n");
+        sb.append("Occupied Countries: ");
+        for (Country country : this.world.getPlayerTwo().getConqueredCountries()) {
+            sb.append(country.getId() + " ");
+        }
+        sb.append("\n");
+        sb.append("Occupied Continents: ");
+        for (Continent continent : this.world.getPlayerTwo().getConqueredContinents()) {
+            sb.append(continent.getId()).append(" ");
+        }
+        sb.append("\n");
+        return sb.toString();
+    }
+
+    @Override
+    public Object clone() {
+        GameState clone = new GameState();
+        clone.setWorld((WorldMap) this.world.clone());
+        clone.setCurrentPlayer(clonePlayer(this.currentPlayer));
+        clone.setOpponentPlayer(clonePlayer(this.opponentPlayer));
+        return clone;
+    }
+
+    private Player clonePlayer(Player player) {
+        Player clone = new Player(player.getId());
+        player.getConqueredCountries().stream()
+                .mapToInt(Country::getId).forEach(id ->
+                clone.addConqueredCountry(this.world.getCountryById(id)));
+        player.getConqueredContinents().stream()
+                .mapToInt(Continent::getId).forEach(id ->
+                clone.addConqueredContinent(this.world.getContinentById(id)));
+        clone.setLastTurnBonusUnits(currentPlayer.getLastTurnBonusUnits());
+        return clone;
     }
 }
