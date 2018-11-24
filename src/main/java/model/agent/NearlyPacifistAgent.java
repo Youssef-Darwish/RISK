@@ -4,7 +4,6 @@ import main.java.model.game.GameState;
 import main.java.model.world.Country;
 import main.java.model.world.Player;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -25,7 +24,7 @@ public class NearlyPacifistAgent implements Agent {
         newState = new GameState(currentState);
         agentPlayer = currentState.getCurrentPlayer();
         Country country = agentPlayer.getWeakestCountry();
-        country.setUnits(country.getUnits() + agentPlayer.getTurnBonus());
+        country.setUnits(country.getUnits() + agentPlayer.getTurnAdditionalUnits());
 
         List<Country> opponentsCountries = currentState.getOpponentPlayer().getConqueredCountries();
         Collections.sort(opponentsCountries);

@@ -1,7 +1,9 @@
 package main.java.model.world;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class WorldMap {
     private List<Continent> continents;
@@ -100,4 +102,9 @@ public class WorldMap {
         return this.continents;
     }
 
+    public Country getLeastFortifiedCountry(Player player) {
+        return this.countries.stream()
+                .filter(country -> !country.hasOccupant() || country.getOccupant().equals(player))
+                .sorted(Comparator.comparing(Country::getUnits)).collect(Collectors.toList()).get(0);
+    }
 }

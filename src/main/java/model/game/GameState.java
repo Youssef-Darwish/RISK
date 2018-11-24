@@ -88,6 +88,7 @@ public class GameState {
         for (Continent continent : this.world.getPlayerTwo().getConqueredContinents()) {
             System.out.print(continent.getId() + " ");
         }
+        System.out.println();
     }
 
     private void init(String inputFileName) {
@@ -163,5 +164,9 @@ public class GameState {
             }
         }
         return null; // Or maybe throw an exception as there isn't a winner yet
+    }
+
+    public Country getLeastFortifiedCountry(Player player) {
+        return this.world.getLeastFortifiedCountry(player);
     }
 }

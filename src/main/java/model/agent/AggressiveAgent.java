@@ -5,7 +5,6 @@ import main.java.model.world.Continent;
 import main.java.model.world.Country;
 import main.java.model.world.Player;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class AggressiveAgent implements Agent {
@@ -36,7 +35,7 @@ public class AggressiveAgent implements Agent {
         newState = new GameState(currentState);
         agentPlayer = currentState.getCurrentPlayer();
         Country country = agentPlayer.getMostFortifiedCountry();
-        country.setUnits(country.getUnits()+agentPlayer.getTurnBonus());
+        country.setUnits(country.getUnits()+agentPlayer.getTurnAdditionalUnits());
         List<Continent> conqueredContinents = agentPlayer.getConqueredContinents();
 
 

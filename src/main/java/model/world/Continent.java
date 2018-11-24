@@ -33,7 +33,7 @@ public class Continent {
 
     public boolean isConquered(Player player) {
         for (Country country : this.countries) {
-            if (!country.getOccupant().equals(player)) {
+            if (!country.hasOccupant() || !country.getOccupant().equals(player)) {
                 return false;
             }
         }
@@ -60,7 +60,6 @@ public class Continent {
                 maxIndex = i;
             }
         }
-
         return countries.get(maxIndex);
     }
 

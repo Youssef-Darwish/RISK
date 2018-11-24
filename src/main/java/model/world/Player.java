@@ -74,7 +74,7 @@ public class Player {
     }
 
     public Country getWeakestCountry(){
-        Country weakestCountry =  this.getConqueredCountries().get(0);
+        Country weakestCountry = this.getConqueredCountries().get(0);
         int minUnits = weakestCountry.getUnits();
 
         for (Country c:this.getConqueredCountries()){
@@ -91,7 +91,7 @@ public class Player {
         return null;
     }
 
-    public int getTurnBonus(){
+    public int getTurnAdditionalUnits(){
         // At the start of each turn, the palyer gets a bonus = 2 per each continent + # of conquered countries / 3 + bonus from last turn conquests.
         return (2 * conqueredContinents.size()) + (int)max(3, floor(conqueredCountries.size() / 3)) + lastTurnBonusUnits;
 
