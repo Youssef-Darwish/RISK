@@ -35,6 +35,7 @@ public class GraphView extends SingleGraph {
 
     public SwingNode getViewNode() {
         ViewPanel viewPanel = this.viewer.addDefaultView(false);
+
         viewPanel.setMouseManager(new DefaultMouseManager() {
             @Override public void init(GraphicGraph graph, View view) { }
             @Override public void release() { }
@@ -46,6 +47,7 @@ public class GraphView extends SingleGraph {
             @Override public void mouseDragged(MouseEvent mouseEvent) { }
             @Override public void mouseMoved(MouseEvent mouseEvent) { }
         });
+
         SwingNode node = new SwingNode();
         node.setContent(viewPanel);
         return node;
