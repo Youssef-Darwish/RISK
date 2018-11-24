@@ -103,8 +103,18 @@ public class WorldMap {
     }
 
     public Country getLeastFortifiedCountry(Player player) {
+        // Returns least fortified country unoccupied or occupied by "player"
         return this.countries.stream()
                 .filter(country -> !country.hasOccupant() || country.getOccupant().equals(player))
-                .sorted(Comparator.comparing(Country::getUnits)).collect(Collectors.toList()).get(0);
+                .sorted(Comparator.comparing(Country::getUnits))
+                .collect(Collectors.toList()).get(0);
+    }
+
+    public List<Country> getUnoccupiedCountries(Player player) {
+        // Returns a list of countries that are unoccupied by "player" sorted by number of units, ties broken using ids.
+        return this.countries.stream()
+                .filter(country -> !country.hasOccupant() || !country.getOccupant().equals(player))
+                .sorted(Comparator.comparing(Country::getUnits))
+                .collect(Collectors.toList());
     }
 }

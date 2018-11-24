@@ -169,4 +169,8 @@ public class GameState {
     public Country getLeastFortifiedCountry(Player player) {
         return this.world.getLeastFortifiedCountry(player);
     }
+
+    public List<Country> getUnoccupiedCountries(Player player) {
+        return this.world.getUnoccupiedCountries(player);
+    }
 }
