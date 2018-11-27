@@ -18,6 +18,7 @@ public class Main {
         String fileName = "./risk_game.txt";
 
         GameState initGameState = new GameState(fileName);
+        System.out.println(initGameState.toString());
         Game.getInstance().play(initGameState, aggressiveAgent, passiveAgent);
 //        testClone(args);
     }

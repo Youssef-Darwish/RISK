@@ -14,10 +14,10 @@ public class PassiveAgent implements Agent {
 
     @Override
     public GameState getNextState(GameState currentState) {
-        GameState newState = new GameState(currentState);
+        GameState newState = (GameState) currentState.clone();
 
-        Player agentPlayer = currentState.getCurrentPlayer();
-        Country leastFortifiedCountry = currentState.getLeastFortifiedCountry(agentPlayer);
+        Player agentPlayer = newState.getCurrentPlayer();
+        Country leastFortifiedCountry = newState.getLeastFortifiedCountry(agentPlayer);
         leastFortifiedCountry.setUnits(leastFortifiedCountry.getUnits() + agentPlayer.getTurnAdditionalUnits());
         if (!leastFortifiedCountry.hasOccupant()) {
             leastFortifiedCountry.setOccupant(agentPlayer);

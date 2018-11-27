@@ -24,6 +24,6 @@ public class Game {
                 currGameState = playerTwoAgent.getNextState(currGameState);
             }
         }
-        System.out.println(currGameState.getWinner().getId());
+        System.out.println("Winner is player with Id: " + currGameState.getWinner().getId());
     }
 }

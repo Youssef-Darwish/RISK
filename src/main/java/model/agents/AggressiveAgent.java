@@ -15,8 +15,9 @@ public class AggressiveAgent implements Agent {
 
     @Override
     public GameState getNextState(GameState currentState) {
-        GameState newState = new GameState(currentState);
-        Player agentPlayer = currentState.getCurrentPlayer();
+        GameState newState = (GameState) currentState.clone();
+        Player agentPlayer = newState.getCurrentPlayer();
+        Player opponentPlayer = newState.getOpponentPlayer();
 
         // Place additional units on the vertex with the most units
         Country mostFortifiedCountry = agentPlayer.getMostFortifiedCountry();
@@ -25,8 +26,11 @@ public class AggressiveAgent implements Agent {
         // greedily attempts to attack so as to cause the most damage - i.e. to prevent its opponent getting a continent bonus (the largest possible).
         boolean attacked = false;
 
-        for (Continent continent : currentState.getUnconqueredContinents(agentPlayer, Comparator.comparing(Continent::getContinentBonus).reversed())) {
+        for (Continent continent : newState.getUnconqueredContinents(agentPlayer, Comparator.comparing(Continent::getContinentBonus).reversed())) {
             for (Country country : continent.getUnconqueredCountries(agentPlayer, Comparator.comparing(Country::getUnits).reversed())) {
+                if (country.hasOccupant() && country.getOccupant().equals(agentPlayer)) {
+                    continue;
+                }
                 for (Country neighbour : country.getNeighbours()) {
                     if (neighbour.hasOccupant() && neighbour.getOccupant().equals(agentPlayer) && neighbour.canAttack(country)) {
                         // Move units, assumption: when attacking, only leave 1 unit behind and attack with the rest
@@ -37,6 +41,12 @@ public class AggressiveAgent implements Agent {
                         // Modify country and player
                         country.setOccupant(agentPlayer);
                         agentPlayer.addConqueredCountry(country);
+                        opponentPlayer.removeConqueredCountry(country);
+
+                        // Check if attack removed a continent from opponent
+                        if (opponentPlayer.getConqueredContinents().contains(continent)) {
+                            opponentPlayer.removeConqueredContinent(continent);
+                        }
 
                         // Check if continent is now conquered
                         if (continent.isConquered(agentPlayer)) {

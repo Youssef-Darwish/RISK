@@ -17,11 +17,13 @@ public class NearlyPacifistAgent implements Agent {
 
     @Override
     public GameState getNextState(GameState currentState) {
-        GameState newState = new GameState(currentState);
+        GameState newState = (GameState) currentState.clone();
 
         // Placing additional units like a passive agent
-        Player agentPlayer = currentState.getCurrentPlayer();
-        Country leastFortifiedCountry = currentState.getLeastFortifiedCountry(agentPlayer);
+        Player agentPlayer = newState.getCurrentPlayer();
+        Player opponentPlayer = newState.getOpponentPlayer();
+
+        Country leastFortifiedCountry = newState.getLeastFortifiedCountry(agentPlayer);
         leastFortifiedCountry.setUnits(leastFortifiedCountry.getUnits() + agentPlayer.getTurnAdditionalUnits());
         if (!leastFortifiedCountry.hasOccupant()) {
             leastFortifiedCountry.setOccupant(agentPlayer);
@@ -34,9 +36,9 @@ public class NearlyPacifistAgent implements Agent {
             }
         }
 
-        // Attacking a country(if possible) such that the agent loses the fewest possible # of units.
+        // Attacking a country (if possible) such that the agent loses the fewest possible # of units.
         boolean attacked = false;
-        for (Country unconqueredCountry : currentState.getUnoccupiedCountries(agentPlayer)) {
+        for (Country unconqueredCountry : newState.getUnoccupiedCountries(agentPlayer)) {
             for (Country neighbour : unconqueredCountry.getNeighbours()) {
                 if (neighbour.hasOccupant() && neighbour.getOccupant().equals(agentPlayer) && neighbour.canAttack(unconqueredCountry)) {
                     // Move units, assumption: when attacking, only leave 1 unit behind and attack with the rest
@@ -47,6 +49,12 @@ public class NearlyPacifistAgent implements Agent {
                     // Modify country and player
                     unconqueredCountry.setOccupant(agentPlayer);
                     agentPlayer.addConqueredCountry(unconqueredCountry);
+                    opponentPlayer.removeConqueredCountry(unconqueredCountry);
+
+                    // Check if attack removed a continent from opponent
+                    if (opponentPlayer.getConqueredContinents().contains(unconqueredCountry)) {
+                        opponentPlayer.removeConqueredContinent(unconqueredCountry.getContinent());
+                    }
 
                     // Check if continent is now conquered
                     Continent continent = unconqueredCountry.getContinent();
