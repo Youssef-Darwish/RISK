@@ -151,6 +151,9 @@ public class GameState implements Cloneable {
         }
 
         sb.append("\n");
+        sb.append("Current player Id: ").append(this.getCurrentPlayer().getId()).append("\n");
+        sb.append("Opponent player Id: ").append(this.getOpponentPlayer().getId()).append("\n");
+        sb.append("\n");
         sb.append("Player 1:\n");
         sb.append("Id: ").append(this.world.getPlayerOne().getId()).append(", last turn bonus: ").append(this.world.getPlayerOne().getLastTurnBonusUnits()).append("\n");
         sb.append("Occupied Countries: ");
@@ -184,20 +187,13 @@ public class GameState implements Cloneable {
     public Object clone() {
         GameState clone = new GameState();
         clone.setWorld((WorldMap) this.world.clone());
-        clone.setCurrentPlayer(clonePlayer(this.currentPlayer));
-        clone.setOpponentPlayer(clonePlayer(this.opponentPlayer));
-        return clone;
-    }
-
-    private Player clonePlayer(Player player) {
-        Player clone = new Player(player.getId());
-        player.getConqueredCountries().stream()
-                .mapToInt(Country::getId).forEach(id ->
-                clone.addConqueredCountry(this.world.getCountryById(id)));
-        player.getConqueredContinents().stream()
-                .mapToInt(Continent::getId).forEach(id ->
-                clone.addConqueredContinent(this.world.getContinentById(id)));
-        clone.setLastTurnBonusUnits(currentPlayer.getLastTurnBonusUnits());
+        if (this.currentPlayer.equals(clone.getWorld().getPlayerOne())) {
+            clone.setCurrentPlayer(clone.getWorld().getPlayerOne());
+            clone.setOpponentPlayer(clone.getWorld().getPlayerTwo());
+        } else {
+            clone.setCurrentPlayer(clone.getWorld().getPlayerTwo());
+            clone.setOpponentPlayer(clone.getWorld().getPlayerOne());
+        }
         return clone;
     }
 
@@ -211,5 +207,11 @@ public class GameState implements Cloneable {
 
     public List<Continent> getUnconqueredContinents(Player player, Comparator<Continent> comparator) {
         return this.world.getUnconqueredContinents(player, comparator);
+    }
+
+    public void swapPlayers() {
+        Player opponent = this.opponentPlayer;
+        this.setOpponentPlayer(this.currentPlayer);
+        this.setCurrentPlayer(opponent);
     }
 }

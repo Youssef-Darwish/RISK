@@ -56,9 +56,7 @@ public class AggressiveAgent implements Agent {
         agentPlayer.setLastTurnBonusUnits(attacked ? 2 : 0);
 
         // switch players
-        newState.setCurrentPlayer(currentState.getOpponentPlayer());
-        newState.setOpponentPlayer(currentState.getCurrentPlayer());
-
+        newState.swapPlayers();
         return newState;
     }
 }

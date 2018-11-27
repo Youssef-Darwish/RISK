@@ -30,11 +30,7 @@ public class PassiveAgent implements Agent {
             }
         }
         agentPlayer.setLastTurnBonusUnits(0);
-
-        // switch players
-        newState.setCurrentPlayer(currentState.getOpponentPlayer());
-        newState.setOpponentPlayer(currentState.getCurrentPlayer());
-
+        newState.swapPlayers();
         return newState;
     }
 }

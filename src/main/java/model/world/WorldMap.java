@@ -57,14 +57,7 @@ public class WorldMap implements Cloneable {
             }
         }
         for (Continent continent : this.continents) {
-            boolean conquered = true;
-            for (Country country : continent.getCountries()) {
-                if (!country.hasOccupant() || !country.getOccupant().equals(this.playerOne)) {
-                    conquered = false;
-                    break;
-                }
-            }
-            if (conquered) {
+            if (continent.isConquered(this.playerOne)) {
                 this.playerOne.addConqueredContinent(continent);
             }
         }
@@ -79,14 +72,7 @@ public class WorldMap implements Cloneable {
             }
         }
         for (Continent continent : this.continents) {
-            boolean conquered = true;
-            for (Country country : continent.getCountries()) {
-                if (!country.hasOccupant() || !country.getOccupant().equals(this.playerTwo)) {
-                    conquered = false;
-                    break;
-                }
-            }
-            if (conquered) {
+            if (continent.isConquered(this.playerTwo)) {
                 this.playerTwo.addConqueredContinent(continent);
             }
         }
@@ -121,6 +107,10 @@ public class WorldMap implements Cloneable {
         WorldMap clone = new WorldMap();
         // Clone countries.
         this.getCountries().forEach(country -> clone.addCountry(country.getId()));
+        // Clone edges.
+        this.getCountries().forEach(country ->
+                country.getNeighbours().forEach(neighbor ->
+                        clone.addEdgeDirected(country.getId(), neighbor.getId())));
         // Clone continents.
         this.getContinents().forEach(continent -> {
             List<Integer> spec = continent.getCountries().stream().mapToInt(Country::getId)
@@ -128,11 +118,25 @@ public class WorldMap implements Cloneable {
             spec.add(0, continent.getContinentBonus());
             clone.addContinent(continent.getId(), spec);
         });
-        // Clone edges.
-        this.getCountries().forEach(country ->
-                country.getNeighbours().forEach(neighbor ->
-                        clone.addEdgeDirected(country.getId(), neighbor.getId())));
-
+        // Clone players
+        this.getCountries().forEach(country -> {
+            if (country.hasOccupant() && country.getOccupant().equals(clone.getPlayerOne())) {
+                clone.getCountryById(country.getId()).setOccupant(clone.getPlayerOne());
+                clone.getCountryById(country.getId()).setUnits(country.getUnits());
+                clone.getPlayerOne().addConqueredCountry(clone.getCountryById(country.getId()));
+            } else if (country.hasOccupant() && country.getOccupant().equals(clone.getPlayerTwo())) {
+                clone.getCountryById(country.getId()).setOccupant(clone.getPlayerTwo());
+                clone.getCountryById(country.getId()).setUnits(country.getUnits());
+                clone.getPlayerTwo().addConqueredCountry(clone.getCountryById(country.getId()));
+            }
+        });
+        clone.getContinents().forEach(continent -> {
+            if (continent.isConquered(clone.getPlayerOne())) {
+                clone.getPlayerOne().addConqueredContinent(continent);
+            } else if (continent.isConquered(clone.getPlayerTwo())) {
+                clone.getPlayerTwo().addConqueredContinent(continent);
+            }
+        });
         return clone;
     }
 
