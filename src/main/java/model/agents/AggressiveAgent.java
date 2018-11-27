@@ -25,7 +25,7 @@ public class AggressiveAgent implements Agent {
         // greedily attempts to attack so as to cause the most damage - i.e. to prevent its opponent getting a continent bonus (the largest possible).
         boolean attacked = false;
 
-        for (Continent continent : currentState.getUnconqueredContinents(agentPlayer, Comparator.comparing(Continent::getContinentBonus))) {
+        for (Continent continent : currentState.getUnconqueredContinents(agentPlayer, Comparator.comparing(Continent::getContinentBonus).reversed())) {
             for (Country country : continent.getUnconqueredCountries(agentPlayer, Comparator.comparing(Country::getUnits).reversed())) {
                 for (Country neighbour : country.getNeighbours()) {
                     if (neighbour.hasOccupant() && neighbour.getOccupant().equals(agentPlayer) && neighbour.canAttack(country)) {
