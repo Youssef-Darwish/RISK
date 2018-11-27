@@ -5,7 +5,9 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class WorldMap {
+import static java.util.stream.Collectors.toList;
+
+public class WorldMap implements Cloneable {
     private List<Continent> continents;
     private List<Country> countries;
     private Player playerOne, playerTwo;
@@ -28,7 +30,7 @@ public class WorldMap {
     public void addContinent(int continentId, List<Integer> continentSpecification) {
         Continent continent = new Continent(continentId, continentSpecification.get(0));
         for (int countryId :  continentSpecification.subList(1, continentSpecification.size())) {
-            continent.addCountry(getCountryById(countryId - 1));
+            continent.addCountry(getCountryById(countryId));
         }
         this.continents.add(continent);
     }
@@ -38,8 +40,12 @@ public class WorldMap {
     }
 
     public void addEdge(int countryOneId, int countryTwoId) {
+        addEdgeDirected(countryOneId, countryTwoId);
+        addEdgeDirected(countryTwoId, countryOneId);
+    }
+
+    public void addEdgeDirected(int countryOneId, int countryTwoId) {
         this.countries.get(countryOneId).addNeighbour(this.countries.get(countryTwoId));
-        this.countries.get(countryTwoId).addNeighbour(this.countries.get(countryOneId));
     }
 
     public void setPlayerOneUnits(List<Integer> playerOneUnits) {
@@ -108,6 +114,26 @@ public class WorldMap {
                 .filter(country -> !country.hasOccupant() || country.getOccupant().equals(player))
                 .sorted(Comparator.comparing(Country::getUnits))
                 .collect(Collectors.toList()).get(0);
+    }
+
+    @Override
+    public Object clone() {
+        WorldMap clone = new WorldMap();
+        // Clone countries.
+        this.getCountries().forEach(country -> clone.addCountry(country.getId()));
+        // Clone continents.
+        this.getContinents().forEach(continent -> {
+            List<Integer> spec = continent.getCountries().stream().mapToInt(Country::getId)
+                    .boxed().collect(Collectors.toList());
+            spec.add(0, continent.getContinentBonus());
+            clone.addContinent(continent.getId(), spec);
+        });
+        // Clone edges.
+        this.getCountries().forEach(country ->
+                country.getNeighbours().forEach(neighbor ->
+                        clone.addEdgeDirected(country.getId(), neighbor.getId())));
+
+        return clone;
     }
 
     public List<Country> getUnoccupiedCountries(Player player) {

@@ -16,6 +16,7 @@ public class Country implements Comparable<Country>{
         this.units = 0;
         this.neighbours = new ArrayList<>();
         this.occupant = null;
+        this.continent = null;
     }
 
     public int getId() {

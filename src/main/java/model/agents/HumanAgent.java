@@ -1,5 +1,6 @@
 package main.java.model.agents;
 
+import main.java.model.Agent;
 import main.java.model.game.GameState;
 
 public class HumanAgent implements Agent {

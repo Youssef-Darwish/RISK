@@ -14,6 +14,11 @@ public class GreedyAgent extends SearchAgent {
     public GameState getNextState(GameState currentState) {
         Player agentPlayer = currentState.getCurrentPlayer();
 
+        // Evaluate heuristic for every single possible state
+        // by conquering any single possible country for the opponent.
+
+        
+
         return null;
     }
 }
