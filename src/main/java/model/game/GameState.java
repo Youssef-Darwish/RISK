@@ -8,6 +8,7 @@ import main.java.model.world.Country;
 import main.java.model.world.Player;
 import main.java.model.world.WorldMap;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -213,5 +214,58 @@ public class GameState implements Cloneable {
         Player opponent = this.opponentPlayer;
         this.setOpponentPlayer(this.currentPlayer);
         this.setCurrentPlayer(opponent);
+    }
+
+    public List<GameState> getAllLegalNextStates() {
+        List<GameState> allLegalNextStates = new ArrayList<>();
+
+        // First: placement of extra units on any available country
+        for (Country country : this.getWorld().getCountries()) {
+            if (country.getOccupant().equals(this.currentPlayer)) {
+                GameState passiveNewState = (GameState) this.clone();
+
+                passiveNewState.getWorld().getCountryById(country.getId()).
+                        setUnits(passiveNewState.getWorld().getCountryById(country.getId()).
+                                getUnits() + passiveNewState.getCurrentPlayer().getTurnAdditionalUnits());
+                passiveNewState.getCurrentPlayer().setLastTurnBonusUnits(0);
+                passiveNewState.swapPlayers();
+                allLegalNextStates.add(passiveNewState);
+
+                // Second: for all countries that can attack, for all countries it can attack, add these states
+                for (Country attackingCountry : this.currentPlayer.getConqueredCountries()) {
+                    for (Country defendingCountry : attackingCountry.getNeighbours()) {
+                        if (attackingCountry.canAttack(defendingCountry)) {
+                            GameState attackingNewState = (GameState) passiveNewState.clone();
+                            attackingNewState.swapPlayers();
+
+                            int unitsToMove = attackingCountry.getUnits() - defendingCountry.getUnits() - 1;
+                            defendingCountry.setUnits(unitsToMove);
+                            attackingCountry.setUnits(1);
+
+                            // Modify country and player
+                            defendingCountry.setOccupant(attackingNewState.getCurrentPlayer());
+                            attackingNewState.getCurrentPlayer().addConqueredCountry(defendingCountry);
+                            attackingNewState.getOpponentPlayer().removeConqueredCountry(defendingCountry);
+
+                            // Check if attack removed a continent from opponent
+                            if (attackingNewState.getOpponentPlayer().getConqueredContinents().contains(defendingCountry.getContinent())) {
+                                attackingNewState.getOpponentPlayer().removeConqueredContinent(defendingCountry.getContinent());
+                            }
+
+                            // Check if continent is now conquered
+                            if (defendingCountry.getContinent().isConquered(attackingNewState.getCurrentPlayer())) {
+                                attackingNewState.getCurrentPlayer().addConqueredContinent(defendingCountry.getContinent());
+                            }
+
+                            // Set last turn bonus for current player and then swap players
+                            attackingNewState.getCurrentPlayer().setLastTurnBonusUnits(2);
+                            attackingNewState.swapPlayers();
+                            allLegalNextStates.add(attackingNewState);
+                        }
+                    }
+                }
+            }
+        }
+        return allLegalNextStates;
     }
 }

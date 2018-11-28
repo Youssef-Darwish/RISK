@@ -11,6 +11,7 @@ public class AStarAgent extends SearchAgent {
 
     @Override
     public GameState getNextState(GameState currentState) {
+
         return null;
     }
 }

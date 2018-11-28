@@ -1,6 +1,7 @@
 package main.java.model;
 
 import main.java.model.agents.AggressiveAgent;
+import main.java.model.agents.NearlyPacifistAgent;
 import main.java.model.agents.PassiveAgent;
 import main.java.model.game.Game;
 import main.java.model.game.GameState;
@@ -13,13 +14,13 @@ public class Main {
 
     public static void main(String[] args) {
 //        // Both agents and filename are taken as input (probably using GUI)
-        Agent passiveAgent = new PassiveAgent();
-        Agent aggressiveAgent = new AggressiveAgent();
         String fileName = "./risk_game.txt";
 
         GameState initGameState = new GameState(fileName);
+        System.out.println("Initial game state: ");
+        System.out.println("===============================================================================");
         System.out.println(initGameState.toString());
-        Game.getInstance().play(initGameState, aggressiveAgent, passiveAgent);
+        Game.getInstance().play(initGameState, new PassiveAgent(), new NearlyPacifistAgent());
 //        testClone(args);
     }
 
