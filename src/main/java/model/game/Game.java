@@ -20,17 +20,22 @@ public class Game {
         GameState currGameState = initialState;
         int cnt = 0;
         while (!currGameState.isFinalState()) {
+            System.out.print("State #" + cnt++ + ": ");
+            for (Country c : currGameState.getWorld().getCountries()) {
+                System.out.print(c.getUnits() + "(" + c.getOccupant().getId() + ")" + " ");
+            }
+            System.out.println();
             if (currGameState.getCurrentPlayer().equals(currGameState.getWorld().getPlayerOne())) {
                 currGameState = playerOneAgent.getNextState(currGameState);
             } else {
                 currGameState = playerTwoAgent.getNextState(currGameState);
             }
-            System.out.print("State #" + cnt++ + ": ");
-            for (Country c : currGameState.getWorld().getCountries()) {
-                System.out.print(c.getUnits() + " ");
-            }
-            System.out.println();
         }
+        System.out.print("State #" + cnt++ + ": ");
+        for (Country c : currGameState.getWorld().getCountries()) {
+            System.out.print(c.getUnits() + "(" + c.getOccupant().getId() + ")" + " ");
+        }
+        System.out.println();
         System.out.println("Winner is player with Id: " + currGameState.getWinner().getId());
         System.out.println();
         System.out.println("===============================================================================");

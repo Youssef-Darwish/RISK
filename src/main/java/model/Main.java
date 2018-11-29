@@ -1,14 +1,17 @@
 package main.java.model;
 
 import main.java.model.agents.AggressiveAgent;
+import main.java.model.agents.GreedyAgent;
 import main.java.model.agents.NearlyPacifistAgent;
 import main.java.model.agents.PassiveAgent;
 import main.java.model.game.Game;
 import main.java.model.game.GameState;
+import main.java.model.heuristics.GreedyHeuristic;
 import main.java.model.world.Player;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class Main {
 
@@ -20,10 +23,20 @@ public class Main {
         System.out.println("Initial game state: ");
         System.out.println("===============================================================================");
         System.out.println(initGameState.toString());
-        Game.getInstance().play(initGameState, new PassiveAgent(), new NearlyPacifistAgent());
+        Game.getInstance().play(initGameState, new GreedyAgent(new GreedyHeuristic()), new PassiveAgent());
 //        testClone(args);
+//        testSuccessorStates(initGameState);
     }
 
+    private static void testSuccessorStates(GameState gameState) {
+        List<GameState> allLegalNextStates = gameState.getAllLegalNextStates();
+        System.out.println("# of next states = " + allLegalNextStates.size());
+        for (GameState gs: allLegalNextStates) {
+            System.out.println("******************************************************");
+            System.out.println(gs.toString());
+            System.out.println("******************************************************");
+        }
+    }
     private static void testClone(String[] args) {
         String fileName = "./risk_game.txt";
         GameState originalGameState = new GameState(fileName);

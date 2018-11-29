@@ -11,16 +11,17 @@ import main.java.model.world.Continent;
 public class GreedyHeuristic implements Heuristic {
     @Override
     public int eval(GameState gameState) {
-        int res = 0;
-        res -= gameState.getCurrentPlayer().getConqueredCountries().size();
-        res -= gameState.getCurrentPlayer()
-                .getConqueredContinents().stream()
-                .mapToInt(Continent::getContinentBonus).sum();
-        res += gameState.getOpponentPlayer()
-                .getConqueredCountries().size();
-        res += gameState.getOpponentPlayer()
-                .getConqueredContinents().stream()
-                .mapToInt(Continent::getContinentBonus).sum();
-        return res;
+//        int res = 0;
+//        res -= gameState.getCurrentPlayer().getConqueredCountries().size();
+//        res -= gameState.getCurrentPlayer()
+//                .getConqueredContinents().stream()
+//                .mapToInt(Continent::getContinentBonus).sum();
+//        res += gameState.getOpponentPlayer()
+//                .getConqueredCountries().size();
+//        res += gameState.getOpponentPlayer()
+//                .getConqueredContinents().stream()
+//                .mapToInt(Continent::getContinentBonus).sum();
+//        return res;
+        return gameState.getCurrentPlayer().getConqueredCountries().size();
     }
 }
