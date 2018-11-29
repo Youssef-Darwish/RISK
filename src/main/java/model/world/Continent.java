@@ -5,7 +5,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class Continent {
+public class Continent implements Comparable<Continent> {
     private int id;
     private List<Country> countries;
     private int continentBonus;
@@ -24,7 +24,7 @@ public class Continent {
         return comparator == null ? this.countries : this.countries.stream().sorted(comparator).collect(Collectors.toList());
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
@@ -48,5 +48,10 @@ public class Continent {
 
     public int getSize() {
         return this.countries.size();
+    }
+
+    @Override
+    public int compareTo(Continent continent) {
+        return this.getId().compareTo(continent.getId());
     }
 }

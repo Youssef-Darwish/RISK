@@ -19,7 +19,7 @@ public class Country implements Comparable<Country>{
         this.continent = null;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
@@ -62,6 +62,6 @@ public class Country implements Comparable<Country>{
 
     @Override
     public int compareTo(Country o) {
-        return this.getUnits().compareTo(o.getUnits());
+        return this.getId().compareTo(o.getId());
     }
 }
