@@ -16,7 +16,6 @@ public class Player {
     private List<Country> conqueredCountries;
     private List<Continent> conqueredContinents;
 
-    //TODO : logic and order of calculating bonus armies ( next & current)
     public Player(int id) {
         this.id = id;
         this.lastTurnBonusUnits = 0;
@@ -37,6 +36,11 @@ public class Player {
         return conqueredCountries;
     }
 
+    public List<Country> getConqueredCountries(Comparator<Country> comparator) {
+        return this.conqueredCountries.stream()
+                .sorted(comparator)
+                .collect(Collectors.toList());
+    }
     public void addConqueredCountry(Country country) {
         this.conqueredCountries.add(country);
     }
@@ -68,6 +72,12 @@ public class Player {
     public Country getMostFortifiedCountry(){
         return this.conqueredCountries.stream()
                 .sorted(Comparator.comparing(Country::getUnits).reversed())
+                .collect(Collectors.toList()).get(0);
+    }
+
+    public Country getLeastFortifiedCountry() {
+        return this.conqueredCountries.stream()
+                .sorted(Comparator.comparing(Country::getUnits))
                 .collect(Collectors.toList()).get(0);
     }
 
@@ -109,15 +119,5 @@ public class Player {
     @Override
     public int hashCode() {
         return Objects.hash(id);
-    }
-
-
-    //TODO implement / decide : canAttack in Player Class or State Class
-    //Done in country Class
-
-
-    //TODO implement / discuss logic
-    public void attack(Country country){
-
     }
 }

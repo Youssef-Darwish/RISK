@@ -55,12 +55,8 @@ public class Country implements Comparable<Country>{
         this.neighbours.add(neighbour);
     }
 
-    public boolean hasOccupant() {
-        return this.occupant != null;
-    }
-
     public boolean canAttack(Country country){
-        return this.hasOccupant() && !country.getOccupant().equals(this.occupant) &&
+        return !country.getOccupant().equals(this.occupant) &&
                 this.neighbours.contains(country) && (this.getUnits() - country.getUnits() > 1);
     }
 

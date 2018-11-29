@@ -31,19 +31,12 @@ public class GameState implements Cloneable {
     private WorldMap world;
     private Player currentPlayer, opponentPlayer;
 
-    public GameState(GameState gameState) {
-        // TODO: Creates a new game state by copying given game state (deep copy). -> Copy constructor
-
-    }
-
     public GameState(String inputFileName){
         this.world = new WorldMap();
         this.init(inputFileName);
     }
 
-    public GameState() {
-
-    }
+    public GameState() {}
 
     private void init(String inputFileName) {
         Parser parser = new Parser(inputFileName);
@@ -67,8 +60,12 @@ public class GameState implements Cloneable {
         }
 
         // Adding players' units to countries
-        this.world.setPlayerOneUnits(parser.getPlayerOneUnits());
-        this.world.setPlayerTwoUnits(parser.getPlayerTwoUnits());
+        this.world.setPlayerOneCountries(parser.getPlayerOneUnits());
+        this.world.setPlayerTwoCountries(parser.getPlayerTwoUnits());
+
+        // Check if players have countries after initial placement of units
+        this.world.setPlayerOneContinents();
+        this.world.setPlayerTwoContinents();
 
         // Initializing current and opponent players
         this.currentPlayer = this.world.getPlayerOne();
@@ -123,16 +120,12 @@ public class GameState implements Cloneable {
         return null; // Or maybe throw an exception as there isn't a winner yet
     }
 
-    public Country getLeastFortifiedCountry(Player player) {
-        return this.world.getLeastFortifiedCountry(player);
-    }
-
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("World countries: \n");
         for (Country country : this.world.getCountries()) {
-            sb.append("Id: ").append(country.getId()).append(", Occupant Id: ").append(country.hasOccupant() ? country.getOccupant().getId() : -1).append(", Units in country: ").append(country.getUnits()).append(", Continent Id: ").append(country.getContinent().getId()).append("\n");
+            sb.append("Id: ").append(country.getId()).append(", Occupant Id: ").append(country.getOccupant().getId()).append(", Units in country: ").append(country.getUnits()).append(", Continent Id: ").append(country.getContinent().getId()).append("\n");
             sb.append("Neighbours ids: ");
             for (Country neighbour : country.getNeighbours()) {
                 sb.append(neighbour.getId()).append(" ");
@@ -196,10 +189,6 @@ public class GameState implements Cloneable {
             clone.setOpponentPlayer(clone.getWorld().getPlayerOne());
         }
         return clone;
-    }
-
-    public List<Country> getUnoccupiedCountries(Player player) {
-        return this.world.getUnoccupiedCountries(player);
     }
 
     public List<Continent> getUnoccupiedContinents() {
@@ -267,5 +256,31 @@ public class GameState implements Cloneable {
             }
         }
         return allLegalNextStates;
+    }
+
+    public void performAttack(Country attackingCountry, Country defendingCountry) {
+        Player attackingPlayer = attackingCountry.getOccupant();
+        Player defendingPlayer = defendingCountry.getOccupant();
+
+        // Move units, assumption: when attacking, only leave 1 unit behind and attack with the rest
+        int unitsToMove = attackingCountry.getUnits() - defendingCountry.getUnits() - 1;
+        defendingCountry.setUnits(unitsToMove);
+        attackingCountry.setUnits(1);
+
+        // Modify country and player
+        defendingCountry.setOccupant(attackingPlayer);
+        attackingPlayer.addConqueredCountry(defendingCountry);
+        defendingPlayer.removeConqueredCountry(defendingCountry);
+
+        // Check if attack removed a continent from opponent
+        Continent continent = defendingCountry.getContinent();
+        if (defendingPlayer.getConqueredContinents().contains(continent)) {
+            defendingPlayer.removeConqueredContinent(continent);
+        }
+
+        // Check if continent is now conquered
+        if (continent.isConquered(attackingPlayer)) {
+            attackingPlayer.addConqueredContinent(continent);
+        }
     }
 }

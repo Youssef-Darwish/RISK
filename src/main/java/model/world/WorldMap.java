@@ -48,7 +48,7 @@ public class WorldMap implements Cloneable {
         this.countries.get(countryOneId).addNeighbour(this.countries.get(countryTwoId));
     }
 
-    public void setPlayerOneUnits(List<Integer> playerOneUnits) {
+    public void setPlayerOneCountries(List<Integer> playerOneUnits) {
         for (int i = 0; i < this.countries.size(); i++) {
             if (playerOneUnits.get(i) > 0) {
                 this.getCountryById(i).setUnits(playerOneUnits.get(i));
@@ -56,6 +56,9 @@ public class WorldMap implements Cloneable {
                 this.playerOne.addConqueredCountry(getCountryById(i));
             }
         }
+    }
+
+    public void setPlayerOneContinents() {
         for (Continent continent : this.continents) {
             if (continent.isConquered(this.playerOne)) {
                 this.playerOne.addConqueredContinent(continent);
@@ -63,7 +66,7 @@ public class WorldMap implements Cloneable {
         }
     }
 
-    public void setPlayerTwoUnits(List<Integer> playerTwoUnits) {
+    public void setPlayerTwoCountries(List<Integer> playerTwoUnits) {
         for (int i = 0; i < this.countries.size(); i++) {
             if (playerTwoUnits.get(i) > 0) {
                 this.getCountryById(i).setUnits(playerTwoUnits.get(i));
@@ -71,6 +74,9 @@ public class WorldMap implements Cloneable {
                 this.playerTwo.addConqueredCountry(getCountryById(i));
             }
         }
+    }
+
+    public void setPlayerTwoContinents() {
         for (Continent continent : this.continents) {
             if (continent.isConquered(this.playerTwo)) {
                 this.playerTwo.addConqueredContinent(continent);
@@ -94,14 +100,6 @@ public class WorldMap implements Cloneable {
         return this.continents;
     }
 
-    public Country getLeastFortifiedCountry(Player player) {
-        // Returns least fortified country unoccupied or occupied by "player"
-        return this.countries.stream()
-                .filter(country -> !country.hasOccupant() || country.getOccupant().equals(player))
-                .sorted(Comparator.comparing(Country::getUnits))
-                .collect(Collectors.toList()).get(0);
-    }
-
     @Override
     public Object clone() {
         WorldMap clone = new WorldMap();
@@ -120,11 +118,11 @@ public class WorldMap implements Cloneable {
         });
         // Clone players
         this.getCountries().forEach(country -> {
-            if (country.hasOccupant() && country.getOccupant().equals(clone.getPlayerOne())) {
+            if (country.getOccupant().equals(clone.getPlayerOne())) {
                 clone.getCountryById(country.getId()).setOccupant(clone.getPlayerOne());
                 clone.getCountryById(country.getId()).setUnits(country.getUnits());
                 clone.getPlayerOne().addConqueredCountry(clone.getCountryById(country.getId()));
-            } else if (country.hasOccupant() && country.getOccupant().equals(clone.getPlayerTwo())) {
+            } else if (country.getOccupant().equals(clone.getPlayerTwo())) {
                 clone.getCountryById(country.getId()).setOccupant(clone.getPlayerTwo());
                 clone.getCountryById(country.getId()).setUnits(country.getUnits());
                 clone.getPlayerTwo().addConqueredCountry(clone.getCountryById(country.getId()));
@@ -139,15 +137,6 @@ public class WorldMap implements Cloneable {
         });
         return clone;
     }
-
-    public List<Country> getUnoccupiedCountries(Player player) {
-        // Returns a list of countries that are unoccupied by "player" sorted by number of units, ties broken using ids.
-        return this.countries.stream()
-                .filter(country -> !country.hasOccupant() || !country.getOccupant().equals(player))
-                .sorted(Comparator.comparing(Country::getUnits))
-                .collect(Collectors.toList());
-    }
-
 
     public List<Continent> getUnoccupiedContinents() {
         return this.continents.stream()

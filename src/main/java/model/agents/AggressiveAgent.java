@@ -23,35 +23,16 @@ public class AggressiveAgent implements Agent {
         Country mostFortifiedCountry = agentPlayer.getMostFortifiedCountry();
         mostFortifiedCountry.setUnits(mostFortifiedCountry.getUnits() + agentPlayer.getTurnAdditionalUnits());
 
-        // greedily attempts to attack so as to cause the most damage - i.e. to prevent its opponent getting a continent bonus (the largest possible).
+        // Greedily attempts to attack so as to cause the most damage - i.e. to prevent its opponent getting a continent bonus (the largest possible).
         boolean attacked = false;
-
         for (Continent continent : newState.getUnconqueredContinents(agentPlayer, Comparator.comparing(Continent::getContinentBonus).reversed())) {
-            for (Country country : continent.getUnconqueredCountries(agentPlayer, Comparator.comparing(Country::getUnits).reversed())) {
-                if (country.hasOccupant() && country.getOccupant().equals(agentPlayer)) {
+            for (Country opponentCountry : continent.getCountries(Comparator.comparing(Country::getUnits).reversed())) {
+                if (opponentCountry.getOccupant().equals(agentPlayer)) {
                     continue;
                 }
-                for (Country neighbour : country.getNeighbours()) {
-                    if (neighbour.hasOccupant() && neighbour.getOccupant().equals(agentPlayer) && neighbour.canAttack(country)) {
-                        // Move units, assumption: when attacking, only leave 1 unit behind and attack with the rest
-                        int unitsToMove = neighbour.getUnits() - country.getUnits() - 1;
-                        country.setUnits(unitsToMove);
-                        neighbour.setUnits(1);
-
-                        // Modify country and player
-                        country.setOccupant(agentPlayer);
-                        agentPlayer.addConqueredCountry(country);
-                        opponentPlayer.removeConqueredCountry(country);
-
-                        // Check if attack removed a continent from opponent
-                        if (opponentPlayer.getConqueredContinents().contains(continent)) {
-                            opponentPlayer.removeConqueredContinent(continent);
-                        }
-
-                        // Check if continent is now conquered
-                        if (continent.isConquered(agentPlayer)) {
-                            agentPlayer.addConqueredContinent(continent);
-                        }
+                for (Country agentCountry : opponentCountry.getNeighbours()) {
+                    if (agentCountry.canAttack(opponentCountry)) {
+                        newState.performAttack(agentCountry, opponentCountry);
                         attacked = true;
                         break;
                     }
@@ -63,9 +44,8 @@ public class AggressiveAgent implements Agent {
                 break;
         }
 
+        // Finalizing move
         agentPlayer.setLastTurnBonusUnits(attacked ? 2 : 0);
-
-        // switch players
         newState.swapPlayers();
         return newState;
     }

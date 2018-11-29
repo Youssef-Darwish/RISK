@@ -39,44 +39,14 @@ public class Continent {
 
     public boolean isConquered(Player player) {
         for (Country country : this.countries) {
-            if (!country.hasOccupant() || !country.getOccupant().equals(player)) {
+            if (!country.getOccupant().equals(player)) {
                 return false;
             }
         }
         return true;
     }
 
-    // Used by semi-pacifist agent
-    public Country getLeastFortifiedCountry(){
-        int minIndex = 0;
-        for (int i = 0;i < countries.size();i++){
-            if(countries.get(i).getUnits()<countries.get(minIndex).getUnits()){
-                minIndex = i;
-            }
-        }
-
-        return countries.get(minIndex);
-    }
-
-    // used by aggressive agent
-    public Country getMostFortifiedCountry(){
-        int maxIndex = 0;
-        for (int i = 0;i < countries.size();i++){
-            if(countries.get(i).getUnits()>countries.get(maxIndex).getUnits()){
-                maxIndex = i;
-            }
-        }
-        return countries.get(maxIndex);
-    }
-
     public int getSize() {
         return this.countries.size();
-    }
-
-    public List<Country> getUnconqueredCountries(Player agentPlayer, Comparator<Country> comparator) {
-        return this.countries.stream()
-                .filter(continent -> !agentPlayer.getConqueredContinents().contains(continent))
-                .sorted(comparator)
-                .collect(Collectors.toList());
     }
 }
