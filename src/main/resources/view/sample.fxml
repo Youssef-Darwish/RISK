@@ -1,20 +1,162 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.canvas.Canvas?>
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
 <BorderPane prefHeight="800.0" style="-fx-background-image: url(&quot;main/view/resources/assets/world_1200_800.jpeg&quot;);" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.controller.ViewController">
    <center>
-      <StackPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" BorderPane.alignment="CENTER">
+      <StackPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="730.0" prefWidth="1200.0" BorderPane.alignment="CENTER">
          <children>
-            <Canvas height="800.0" width="1200.0">
-            </Canvas>
+            <BorderPane fx:id="gameOverPane" style="-fx-background-color: rgba(255, 255, 255, 0.85);">
+               <StackPane.margin>
+                  <Insets />
+               </StackPane.margin>
+               <center>
+                  <Label graphicTextGap="20.0" text="P L A Y E R  W I N S" textFill="#353535">
+                     <font>
+                        <Font size="64.0" />
+                     </font>
+                     <graphic>
+                        <ImageView fx:id="winningPlayerIcon" fitHeight="150.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@assets/circle_1.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Label>
+               </center>
+               <bottom>
+                  <JFXButton text=" " BorderPane.alignment="TOP_CENTER" />
+               </bottom>
+            </BorderPane>
          </children>
       </StackPane>
    </center>
    <top>
-      <HBox fillHeight="false" prefHeight="25.0" prefWidth="200.0" style="-fx-background-color: #353535;" BorderPane.alignment="CENTER" />
+      <AnchorPane BorderPane.alignment="CENTER">
+         <BorderPane.margin>
+            <Insets />
+         </BorderPane.margin>
+         <children>
+            <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <HBox fillHeight="false" prefHeight="25.0" prefWidth="200.0" spacing="10.0" style="-fx-background-color: #353535;">
+                     <children>
+                        <JFXButton maxHeight="20.0" minHeight="20.0" prefHeight="20.0" ripplerFill="#ababab" text=" ">
+                           <graphic>
+                              <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@assets/return.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                           <HBox.margin>
+                              <Insets />
+                           </HBox.margin>
+                        </JFXButton>
+                        <ImageView fitHeight="150.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@assets/circle_1.png" />
+                           </image>
+                        </ImageView>
+                        <Separator disable="true" prefWidth="10.0" visible="false" />
+                        <Label fx:id="troopsCount1" maxWidth="100.0" prefWidth="100.0" text="670 (+2)" textFill="WHITE">
+                           <graphic>
+                              <ImageView fitHeight="150.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@assets/chess.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Label>
+                        <Label fx:id="conqCountriesCount1" maxWidth="50.0" prefWidth="50.0" text="4" textFill="WHITE">
+                           <graphic>
+                              <ImageView fitHeight="150.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@assets/flag.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Label>
+                        <Label fx:id="conqContinentsCount1" maxWidth="30.0" prefWidth="30.0" text="1" textFill="WHITE">
+                           <graphic>
+                              <ImageView fitHeight="150.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@assets/continent.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Label>
+                     </children>
+                     <padding>
+                        <Insets bottom="10.0" left="5.0" top="10.0" />
+                     </padding>
+                  </HBox>
+                  <HBox fillHeight="false" layoutX="10.0" layoutY="10.0" prefHeight="25.0" prefWidth="200.0" spacing="10.0" style="-fx-background-color: #353535;">
+                     <children>
+                        <Separator prefWidth="47.0" visible="false" />
+                        <ImageView fitHeight="150.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@assets/circle_2.png" />
+                           </image>
+                        </ImageView>
+                        <Separator disable="true" prefWidth="10.0" visible="false" />
+                        <Label fx:id="troopsCount2" maxWidth="100.0" prefWidth="100.0" text="520 (+2)" textFill="WHITE">
+                           <graphic>
+                              <ImageView fitHeight="150.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@assets/chess.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Label>
+                        <Label fx:id="conqCountriesCount2" maxWidth="50.0" prefWidth="50.0" text="2" textFill="WHITE">
+                           <graphic>
+                              <ImageView fitHeight="150.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@assets/flag.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Label>
+                        <Label fx:id="conqContinentsCount2" maxWidth="30.0" prefWidth="30.0" text="0" textFill="WHITE">
+                           <graphic>
+                              <ImageView fitHeight="150.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@assets/continent.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Label>
+                     </children>
+                     <padding>
+                        <Insets bottom="10.0" left="5.0" />
+                     </padding>
+                  </HBox>
+               </children>
+            </VBox>
+            <JFXButton fx:id="attackButton" prefWidth="200.0" style="-fx-background-color: #454545;" text="A T T A C K" textFill="WHITE" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="5.0" />
+            <JFXButton fx:id="nextTurnButton" onAction="#nextTurn" disable="true" layoutX="10.0" layoutY="10.0" prefWidth="200.0" style="-fx-background-color: #454545;" text="N E X T  T U R N" textFill="WHITE" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="35.0" />
+            <Label graphicTextGap="10.0" text="T U R N " textFill="WHITE" AnchorPane.rightAnchor="260.0" AnchorPane.topAnchor="8.0">
+               <graphic>
+                  <ImageView fx:id="curTurnIcon" fitHeight="150.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@assets/circle_1.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Label>
+         </children>
+      </AnchorPane>
    </top>
 </BorderPane>

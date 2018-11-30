@@ -28,7 +28,3 @@ edge {
     shape: cubic-curve;
 }
 
-graph {
-    fill-mode: image-scaled-ratio-max;
-    fill-image: url('main/resources/view/assets/world_1200_800.jpeg');
-}
