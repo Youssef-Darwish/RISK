@@ -2,6 +2,7 @@ package main.java.controller;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import main.java.model.Agent;
 import main.java.model.agents.AggressiveAgent;
@@ -16,6 +17,7 @@ import java.io.IOException;
 public class ViewController {
     /** FXML Variables **/
     @FXML private StackPane root;
+    @FXML private BorderPane gameOverPane;
 
     /** Game Variables **/
     private Game game;
