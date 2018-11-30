@@ -5,6 +5,7 @@ import main.java.model.SearchAgent;
 import main.java.model.game.GameState;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class AStarAgent extends SearchAgent {
     private List<GameState> pathStates;
@@ -15,36 +16,64 @@ public class AStarAgent extends SearchAgent {
 
     private List<GameState> aStarSearch(GameState initState, Heuristic heuristic) {
         // NOTE: CHECK LAST STATE IN THE LIST TO KNOW IF ASTAR REACHED A SOLUTION OR NOT
-        List<GameState> pathStates = new LinkedList<>();
         Queue<GameState> frontier = new PriorityQueue<>(Comparator.comparing(heuristic::eval));
+        Map<GameState, Integer> heuristicMap = new HashMap<>();
+        Map<GameState, GameState> parentsMap = new HashMap<>();
+
+        PassiveAgent passiveAgent = new PassiveAgent();
+
         frontier.add(initState);
+        heuristicMap.put(initState, heuristic.eval(initState));
+        parentsMap.put(initState, null);
+
         Set<GameState> explored = new HashSet<>();
         while (!frontier.isEmpty()) {
             GameState currState = frontier.poll();
             explored.add(currState);
+            heuristicMap.remove(currState);
 
             if (currState.isFinalState()) {
-                // TODO: return reconstruct path
-                pathStates.add(currState);
-                break;
+                return reconstructPath(parentsMap, currState);
             }
 
-            for (GameState neighbour : currState.getAllLegalNextStates()) {
-                PassiveAgent passiveAgent = new PassiveAgent();
-                GameState gameState = passiveAgent.getNextState(neighbour);
+            for (GameState passiveNeighbourState : currState.getAllLegalNextStates()) {
+                GameState neighbourState = passiveAgent.getNextState(passiveNeighbourState);
 
-                if (!frontier.contains(gameState) && !explored.contains(gameState)) {
-                    frontier.add(gameState);
-                } else if (frontier.contains(gameState)) {
-                    frontier.add(gameState); // here i should only insert the gameState with less heuristic value.
+                if (explored.contains(neighbourState)) {
+                    continue;
+                }
+
+                int neighbourStateHValue = heuristic.eval(neighbourState);
+
+                if (!frontier.contains(neighbourState)) {
+                    frontier.add(neighbourState);
+                    heuristicMap.put(neighbourState, neighbourStateHValue);
+                    parentsMap.put(neighbourState, currState);
+                } else if (neighbourStateHValue < heuristicMap.get(neighbourState)) {
+                    heuristicMap.remove(neighbourState);
+                    heuristicMap.put(neighbourState, neighbourStateHValue);
+                    frontier.remove(neighbourState);
+                    frontier.add(neighbourState);
+                    parentsMap.remove(neighbourState);
+                    parentsMap.put(neighbourState, currState);
                 }
             }
         }
-        return pathStates;
+        return null;
+    }
+
+    private List<GameState> reconstructPath(Map<GameState,GameState> parentsMap, GameState currState) {
+        List<GameState> path = new ArrayList<>();
+        while (parentsMap.get(currState) != null) {
+            path.add(currState);
+            currState = parentsMap.get(currState);
+        }
+        Collections.reverse(path);
+        return path;
     }
 
     @Override
     public GameState getNextState(GameState currentState) {
-        return null;
+        return this.pathStates.get(currentState.getDepth());
     }
 }

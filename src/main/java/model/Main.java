@@ -24,6 +24,7 @@ public class Main {
         System.out.println("===============================================================================");
         System.out.println(initGameState.toString());
         Game.getInstance().play(initGameState, new GreedyAgent(new GreedyHeuristic()), new PassiveAgent());
+
 //        testClone(args);
 //        testSuccessorStates(initGameState);
     }

@@ -4,6 +4,7 @@ import main.java.model.Agent;
 import main.java.model.game.GameState;
 
 public class HumanAgent implements Agent {
+
     @Override
     public GameState getNextState(GameState currentState) {
         return null;
