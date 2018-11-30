@@ -69,7 +69,6 @@ public class Continent implements Comparable<Continent> {
 
     @Override
     public int hashCode() {
-
-        return Objects.hash(id, countries, continentBonus);
+        return Objects.hash(id, countries.stream().map(Country::getId).collect(Collectors.toList()), continentBonus);
     }
 }

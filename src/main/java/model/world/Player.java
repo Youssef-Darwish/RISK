@@ -101,6 +101,7 @@ public class Player {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, lastTurnBonusUnits, conqueredCountries, conqueredContinents);
+        return Objects.hash(id, lastTurnBonusUnits, conqueredCountries.stream().map(Country::getId).collect(Collectors.toSet()),
+                conqueredContinents.stream().map(Continent::getId).collect(Collectors.toSet()));
     }
 }

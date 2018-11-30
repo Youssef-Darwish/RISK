@@ -165,7 +165,6 @@ public class WorldMap implements Cloneable {
 
     @Override
     public int hashCode() {
-
         return Objects.hash(continents, countries, playerOne, playerTwo);
     }
 }
