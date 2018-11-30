@@ -3,6 +3,7 @@ package main.java.model.world;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class Continent implements Comparable<Continent> {
@@ -53,5 +54,22 @@ public class Continent implements Comparable<Continent> {
     @Override
     public int compareTo(Continent continent) {
         return this.getId().compareTo(continent.getId());
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Continent)) return false;
+        Continent continent = (Continent) o;
+        return id == continent.id &&
+                continentBonus == continent.continentBonus &&
+                Objects.equals(countries.stream().map(Country::getId).collect(Collectors.toList()),
+                        continent.countries.stream().map(Country::getId).collect(Collectors.toList()));
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(id, countries, continentBonus);
     }
 }

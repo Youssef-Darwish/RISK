@@ -2,6 +2,8 @@ package main.java.model.world;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class Country implements Comparable<Country>{
 
@@ -63,5 +65,24 @@ public class Country implements Comparable<Country>{
     @Override
     public int compareTo(Country o) {
         return this.getId().compareTo(o.getId());
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Country)) return false;
+        Country country = (Country) o;
+        return id == country.id &&
+                units == country.units &&
+                occupant.getId() == country.occupant.getId() &&
+                continent.getId().equals(country.continent.getId()) &&
+                Objects.equals(neighbours.stream().map(Country::getId).collect(Collectors.toSet()),
+                        country.neighbours.stream().map(Country::getId).collect(Collectors.toSet()));
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(id, occupant, continent, units, neighbours);
     }
 }

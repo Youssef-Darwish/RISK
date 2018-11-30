@@ -3,6 +3,7 @@ package main.java.model.world;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
@@ -149,5 +150,22 @@ public class WorldMap implements Cloneable {
                 .filter(continent -> !player.getConqueredContinents().contains(continent))
                 .sorted(comparator)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof WorldMap)) return false;
+        WorldMap worldMap = (WorldMap) o;
+        return Objects.equals(continents, worldMap.continents) &&
+                Objects.equals(countries, worldMap.countries) &&
+                Objects.equals(playerOne, worldMap.playerOne) &&
+                Objects.equals(playerTwo, worldMap.playerTwo);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(continents, countries, playerOne, playerTwo);
     }
 }
