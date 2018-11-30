@@ -118,11 +118,11 @@ public class WorldMap implements Cloneable {
         });
         // Clone players
         this.getCountries().forEach(country -> {
-            if (country.getOccupant().equals(clone.getPlayerOne())) {
+            if (country.getOccupant().getId() == clone.getPlayerOne().getId()) {
                 clone.getCountryById(country.getId()).setOccupant(clone.getPlayerOne());
                 clone.getCountryById(country.getId()).setUnits(country.getUnits());
                 clone.getPlayerOne().addConqueredCountry(clone.getCountryById(country.getId()));
-            } else if (country.getOccupant().equals(clone.getPlayerTwo())) {
+            } else if (country.getOccupant().getId() == clone.getPlayerTwo().getId()) {
                 clone.getCountryById(country.getId()).setOccupant(clone.getPlayerTwo());
                 clone.getCountryById(country.getId()).setUnits(country.getUnits());
                 clone.getPlayerTwo().addConqueredCountry(clone.getCountryById(country.getId()));

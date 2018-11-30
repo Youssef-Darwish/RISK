@@ -7,11 +7,11 @@ import main.java.model.agents.PassiveAgent;
 import main.java.model.game.Game;
 import main.java.model.game.GameState;
 import main.java.model.heuristics.GreedyHeuristic;
+import main.java.model.world.Continent;
+import main.java.model.world.Country;
 import main.java.model.world.Player;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public class Main {
 

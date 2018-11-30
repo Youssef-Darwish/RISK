@@ -91,11 +91,16 @@ public class Player {
         if (this == o) return true;
         if (!(o instanceof Player)) return false;
         Player player = (Player) o;
-        return id == player.id;
+        return id == player.id &&
+                lastTurnBonusUnits == player.lastTurnBonusUnits &&
+                Objects.equals(conqueredCountries.stream().map(Country::getId).collect(Collectors.toSet()),
+                        player.conqueredCountries.stream().map(Country::getId).collect(Collectors.toSet())) &&
+                Objects.equals(conqueredContinents.stream().map(Continent::getId).collect(Collectors.toSet()),
+                        player.conqueredContinents.stream().map(Continent::getId).collect(Collectors.toSet()));
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(id, lastTurnBonusUnits, conqueredCountries, conqueredContinents);
     }
 }

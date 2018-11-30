@@ -25,7 +25,7 @@ public class Game {
                 System.out.print(c.getUnits() + "(" + c.getOccupant().getId() + ")" + " ");
             }
             System.out.println();
-            if (currGameState.getCurrentPlayer().equals(currGameState.getWorld().getPlayerOne())) {
+            if (currGameState.getCurrentPlayer().getId() == currGameState.getWorld().getPlayerOne().getId()) {
                 currGameState = playerOneAgent.getNextState(currGameState);
             } else {
                 currGameState = playerTwoAgent.getNextState(currGameState);

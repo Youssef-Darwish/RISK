@@ -11,6 +11,7 @@ import main.java.model.world.WorldMap;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 
@@ -30,13 +31,17 @@ public class GameState implements Cloneable {
 
     private WorldMap world;
     private Player currentPlayer, opponentPlayer;
+    private int depth;
 
     public GameState(String inputFileName){
         this.world = new WorldMap();
+        this.depth = 0;
         this.init(inputFileName);
     }
 
-    public GameState() {}
+    public GameState() {
+        this.depth = 0;
+    }
 
     private void init(String inputFileName) {
         Parser parser = new Parser(inputFileName);
@@ -71,6 +76,15 @@ public class GameState implements Cloneable {
         this.currentPlayer = this.world.getPlayerOne();
         this.opponentPlayer = this.world.getPlayerTwo();
     }
+
+    public int getDepth() {
+        return this.depth;
+    }
+
+    public void setDepth(int depth) {
+        this.depth = depth;
+    }
+
 
     public WorldMap getWorld() {
         return world;
@@ -180,8 +194,9 @@ public class GameState implements Cloneable {
     @Override
     public Object clone() {
         GameState clone = new GameState();
+        clone.setDepth(this.depth);
         clone.setWorld((WorldMap) this.world.clone());
-        if (this.currentPlayer.equals(clone.getWorld().getPlayerOne())) {
+        if (this.currentPlayer.getId() == clone.getWorld().getPlayerOne().getId()) {
             clone.setCurrentPlayer(clone.getWorld().getPlayerOne());
             clone.setOpponentPlayer(clone.getWorld().getPlayerTwo());
         } else {
@@ -222,11 +237,12 @@ public class GameState implements Cloneable {
             // Finalize passive new state (skip attack state)
             passiveNewState.getCurrentPlayer().setLastTurnBonusUnits(0);
             passiveNewState.swapPlayers();
+            passiveNewState.setDepth(passiveNewState.getDepth() + 1);
             allLegalNextStates.add(passiveNewState);
 
             // Second: for all countries that can attack, for all countries it can attack, add these states
             for (Country attackingCountry : attackingNewState.getWorld().getCountries()) {
-                if (attackingCountry.getOccupant().equals(attackingNewState.getCurrentPlayer())) {
+                if (attackingCountry.getOccupant().getId() == attackingNewState.getCurrentPlayer().getId()) {
                     for (Country defendingCountry : attackingCountry.getNeighbours()) {
                         if (attackingCountry.canAttack(defendingCountry)) {
                             GameState newState = (GameState) attackingNewState.clone();
@@ -238,7 +254,7 @@ public class GameState implements Cloneable {
                             // Finalize new state
                             newState.getCurrentPlayer().setLastTurnBonusUnits(2);
                             newState.swapPlayers();
-
+                            newState.setDepth(newState.getDepth() + 1);
                             allLegalNextStates.add(newState);
                         }
                     }
@@ -272,5 +288,20 @@ public class GameState implements Cloneable {
         if (continent.isConquered(attackingPlayer)) {
             attackingPlayer.addConqueredContinent(continent);
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof GameState)) return false;
+        GameState gameState = (GameState) o;
+        return Objects.equals(world, gameState.world) &&
+                Objects.equals(currentPlayer, gameState.currentPlayer) &&
+                Objects.equals(opponentPlayer, gameState.opponentPlayer);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(world, currentPlayer, opponentPlayer);
     }
 }

@@ -27,7 +27,7 @@ public class AggressiveAgent implements Agent {
         boolean attacked = false;
         for (Continent continent : newState.getUnconqueredContinents(agentPlayer, Comparator.comparing(Continent::getContinentBonus).reversed())) {
             for (Country opponentCountry : continent.getCountries(Comparator.comparing(Country::getUnits).reversed())) {
-                if (opponentCountry.getOccupant().equals(agentPlayer)) {
+                if (opponentCountry.getOccupant().getId() == agentPlayer.getId()) {
                     continue;
                 }
                 for (Country agentCountry : opponentCountry.getNeighbours()) {
@@ -47,6 +47,7 @@ public class AggressiveAgent implements Agent {
         // Finalizing move
         agentPlayer.setLastTurnBonusUnits(attacked ? 2 : 0);
         newState.swapPlayers();
+        newState.setDepth(newState.getDepth() + 1);
         return newState;
     }
 }

@@ -43,6 +43,7 @@ public class NearlyPacifistAgent implements Agent {
         // Finalizing move
         agentPlayer.setLastTurnBonusUnits(attacked ? 2 : 0);
         newState.swapPlayers();
+        newState.setDepth(newState.getDepth() + 1);
         return newState;
     }
 
