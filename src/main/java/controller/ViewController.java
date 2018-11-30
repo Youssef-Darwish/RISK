@@ -1,19 +1,19 @@
 package main.java.controller;
 
 import com.jfoenix.controls.JFXButton;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import main.java.model.Agent;
 import main.java.model.agents.AggressiveAgent;
-import main.java.model.agents.GreedyAgent;
 import main.java.model.agents.HumanAgent;
 import main.java.model.agents.PassiveAgent;
 import main.java.model.game.Game;
 import main.java.model.game.GameState;
+import main.java.model.world.Player;
 import main.java.view.GraphView;
 import org.graphstream.ui.view.ViewerListener;
 
@@ -26,6 +26,10 @@ public class ViewController {
     @FXML private JFXButton attackButton;
     @FXML private JFXButton nextTurnButton;
     @FXML private ImageView curTurnIcon;
+    @FXML private ImageView winningPlayerIcon;
+    @FXML private Label troopsCount1, troopsCount2;
+    @FXML private Label conqCountriesCount1, conqCountriesCount2;
+    @FXML private Label conqContinentsCount1, conqContinentsCount2;
 
     /** Game Variables **/
     private Game game;
@@ -49,11 +53,13 @@ public class ViewController {
         this.initGame();
         this.initGraphStream();
         this.initControls();
+
+        this.gameOverPane.toBack();
     }
 
     private void initGame() {
         this.game = Game.getInstance();
-        this.player1 = new PassiveAgent();
+        this.player1 = new AggressiveAgent();
         this.player2 = new PassiveAgent();
         this.curGameState = new GameState(FILE_NAME);
     }
@@ -94,15 +100,21 @@ public class ViewController {
         boolean human = this.player1 instanceof HumanAgent;
         this.attackButton.setDisable(!human);
         this.nextTurnButton.setDisable(human);
+
+        this.updateInfo();
     }
 
     @FXML
     public void nextTurn() {
-        this.game.play(this.curGameState, player1, player2);
+        this.curGameState = this.game.play(this.curGameState, player1, player2);
+        this.graphView.updateFromGameState(this.curGameState);
+
         this.toggleTurns();
+        this.updateInfo();
+
         if (this.curGameState.isFinalState()) {
             this.nextTurnButton.setDisable(true);
-//            this.drawGameOver();
+            this.drawGameOver();
         }
     }
 
@@ -110,5 +122,37 @@ public class ViewController {
         this.curTurnIcon.setImage(new Image(
                 this.curGameState.getCurrentPlayer().equals(this.curGameState.getWorld().getPlayerOne()) ?
                         PLAYER_1_ICON : PLAYER_2_ICON));
+    }
+
+    private void updateInfo() {
+        Player player1 = this.curGameState.getWorld().getPlayerOne();
+        Player player2 = this.curGameState.getWorld().getPlayerTwo();
+
+        this.troopsCount1.setText(
+                String.valueOf(player1.getUnitsCount()) + "(+" +
+                        String.valueOf(player1.getLastTurnBonusUnits()) + ")");
+        this.troopsCount2.setText(
+                String.valueOf(player2.getUnitsCount()) + "(+" +
+                        String.valueOf(player2.getLastTurnBonusUnits() + ")"));
+
+        this.conqCountriesCount1.setText(
+                String.valueOf(player1.getConqueredCountries().size()));
+        this.conqCountriesCount2.setText(
+                String.valueOf(player2.getConqueredCountries().size()));
+
+        this.conqContinentsCount1.setText(
+                String.valueOf(player1.getConqueredContinents().size()));
+        this.conqContinentsCount2.setText(
+                String.valueOf(player2.getConqueredContinents().size()));
+    }
+
+    private void drawGameOver() {
+        this.attackButton.setDisable(true);
+        this.nextTurnButton.setDisable(true);
+        this.gameOverPane.toFront();
+
+        this.winningPlayerIcon.setImage(new Image(
+                this.curGameState.getWinner().equals(this.curGameState.getWorld().getPlayerOne()) ?
+                        PLAYER_1_ICON: PLAYER_2_ICON));
     }
 }

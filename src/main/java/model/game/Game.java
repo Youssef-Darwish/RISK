@@ -15,7 +15,7 @@ public class Game {
         return instance;
     }
 
-    public void play(GameState initialState, Agent playerOneAgent, Agent playerTwoAgent) {
+    public GameState play(GameState initialState, Agent playerOneAgent, Agent playerTwoAgent) {
         // Play takes both players' agents and plays the game starting from the given game state
         GameState currGameState = initialState;
         int cnt = 0;
@@ -37,5 +37,7 @@ public class Game {
 //        System.out.println("Final game state: ");
 //        System.out.println("===============================================================================");
 //        System.out.println(currGameState.toString());
+
+        return currGameState;
     }
 }

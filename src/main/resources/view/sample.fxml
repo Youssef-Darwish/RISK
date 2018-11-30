@@ -79,7 +79,7 @@
                               </ImageView>
                            </graphic>
                         </Label>
-                        <Label fx:id="conqueredCount1" maxWidth="50.0" prefWidth="50.0" text="4" textFill="WHITE">
+                        <Label fx:id="conqCountriesCount1" maxWidth="50.0" prefWidth="50.0" text="4" textFill="WHITE">
                            <graphic>
                               <ImageView fitHeight="150.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -88,7 +88,7 @@
                               </ImageView>
                            </graphic>
                         </Label>
-                        <Label fx:id="continentsCount1" maxWidth="30.0" prefWidth="30.0" text="1" textFill="WHITE">
+                        <Label fx:id="conqContinentsCount1" maxWidth="30.0" prefWidth="30.0" text="1" textFill="WHITE">
                            <graphic>
                               <ImageView fitHeight="150.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -120,7 +120,7 @@
                               </ImageView>
                            </graphic>
                         </Label>
-                        <Label fx:id="conqueredCount2" maxWidth="50.0" prefWidth="50.0" text="2" textFill="WHITE">
+                        <Label fx:id="conqCountriesCount2" maxWidth="50.0" prefWidth="50.0" text="2" textFill="WHITE">
                            <graphic>
                               <ImageView fitHeight="150.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -129,7 +129,7 @@
                               </ImageView>
                            </graphic>
                         </Label>
-                        <Label fx:id="continentsCount2" maxWidth="30.0" prefWidth="30.0" text="0" textFill="WHITE">
+                        <Label fx:id="conqContinentsCount2" maxWidth="30.0" prefWidth="30.0" text="0" textFill="WHITE">
                            <graphic>
                               <ImageView fitHeight="150.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                                  <image>

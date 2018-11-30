@@ -23,8 +23,10 @@ public class GraphView extends SingleGraph {
     private ViewerPipe viewerpipe;
     private ViewPanel viewPanel;
 
-    public GraphView(final String id) {
+    private GraphView(final String id) {
         super(id);
+        System.setProperty("org.graphstream.ui.renderer",
+                "org.graphstream.ui.j2dviewer.J2DGraphRenderer");
         // Initialize graph viewer
         this.viewer = new Viewer(this, Viewer.ThreadingModel.GRAPH_IN_GUI_THREAD);
         this.viewer.enableAutoLayout();
@@ -32,8 +34,13 @@ public class GraphView extends SingleGraph {
         // Add ui attributes
         this.addAttribute("ui.quality");
         this.addAttribute("ui.antialias");
-        System.setProperty("org.graphstream.ui.renderer",
-                "org.graphstream.ui.j2dviewer.J2DGraphRenderer");
+
+    }
+
+    public static GraphView fromGameState(final GameState gameState) {
+        GraphView graphView = new GraphView("World Map");
+        graphView.buildFromGameState(gameState, true);
+        return graphView;
     }
 
     public SwingNode newViewNode() {
@@ -79,42 +86,48 @@ public class GraphView extends SingleGraph {
         this.viewerpipe.addViewerListener(viewerListener);
     }
 
-    public static GraphView fromGameState(final GameState gameState) {
-        GraphView graphView = new GraphView("World Map");
+    public void updateFromGameState(final GameState gameState) {
+       this.buildFromGameState(gameState, false);
+    }
+
+    private void buildFromGameState(GameState gameState, boolean rebuild) {
+        if (rebuild) {
+            this.getEdgeSet().clear();
+            this.getNodeSet().clear();
+        }
+
         // Add first player nodes to graph
         for (Country country : gameState.getWorld().getPlayerOne().getConqueredCountries()) {
-            Node countryNode = graphView.addNode(String.valueOf(country.getId()));
-            countryNode.addAttribute("ui.label",
+            String id = String.valueOf(country.getId());
+            Node countryNode = rebuild ? this.addNode(id) : this.getNode(id);
+            countryNode.setAttribute("ui.label",
                     String.valueOf(country.getUnits()) + " (" +
                             String.valueOf(country.getContinent().getId()) + ")");
-            countryNode.addAttribute("ui.class", "player1");
+            countryNode.setAttribute("ui.class", "player1");
         }
+
         // Add second player nodes to graph
         for (Country country : gameState.getWorld().getPlayerTwo().getConqueredCountries()) {
-            Node countryNode = graphView.addNode(String.valueOf(country.getId()));
-            countryNode.addAttribute("ui.label",
+            String id = String.valueOf(country.getId());
+            Node countryNode = rebuild ? this.addNode(id) : this.getNode(id);
+            countryNode.setAttribute("ui.label",
                     String.valueOf(country.getUnits()) + " (" +
-                    String.valueOf(country.getContinent().getId()) + ")");
-            countryNode.addAttribute("ui.class", "player2");
+                            String.valueOf(country.getContinent().getId()) + ")");
+            countryNode.setAttribute("ui.class", "player2");
         }
-        // Add unoccupied nodes
-        for (Country country : gameState.getWorld().getCountries()) {
-            if (graphView.getNode(String.valueOf(country.getId())) != null)
-                continue;
-            Node countryNode = graphView.addNode(String.valueOf(country.getId()));
-            countryNode.addAttribute("ui.label", String.valueOf(0));
-            countryNode.addAttribute("ui.class", "unoccupied");
-        }
+
         // Add edges
-        for (Country country : gameState.getWorld().getCountries())
-            for (Country neighbor : country.getNeighbours()) {
-                String edgeId = String.valueOf(country.getId())
-                        + "-" + String.valueOf(neighbor.getId());
-                try {
-                    graphView.addEdge(edgeId, String.valueOf(country.getId()),
-                            String.valueOf(neighbor.getId()));
-                } catch (EdgeRejectedException ignored) { }
-            }
-        return graphView;
+        if (rebuild) {
+            for (Country country : gameState.getWorld().getCountries())
+                for (Country neighbor : country.getNeighbours()) {
+                    String edgeId = String.valueOf(country.getId())
+                            + "-" + String.valueOf(neighbor.getId());
+                    try {
+                        this.addEdge(edgeId, String.valueOf(country.getId()),
+                                String.valueOf(neighbor.getId()));
+                    } catch (EdgeRejectedException ignored) {
+                    }
+                }
+        }
     }
 }

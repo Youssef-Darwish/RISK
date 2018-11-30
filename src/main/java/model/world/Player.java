@@ -37,6 +37,7 @@ public class Player {
                 .sorted(comparator)
                 .collect(Collectors.toSet());
     }
+
     public void addConqueredCountry(Country country) {
         this.conqueredCountries.add(country);
     }
@@ -80,6 +81,10 @@ public class Player {
     public int getTurnAdditionalUnits(){
         // At the start of each turn, the palyer gets a constant bonus for each continent + # of conquered countries / 3 + bonus from last turn conquests.
         return getContinentsBonus() + (int)max(3, floor(conqueredCountries.size() / 3)) + lastTurnBonusUnits;
+    }
+
+    public int getUnitsCount() {
+        return this.conqueredCountries.stream().mapToInt(Country::getUnits).sum();
     }
 
     private int getContinentsBonus() {
