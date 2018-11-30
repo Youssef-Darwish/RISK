@@ -84,13 +84,17 @@ public class GraphView extends SingleGraph {
         // Add first player nodes to graph
         for (Country country : gameState.getWorld().getPlayerOne().getConqueredCountries()) {
             Node countryNode = graphView.addNode(String.valueOf(country.getId()));
-            countryNode.addAttribute("ui.label", String.valueOf(country.getUnits()));
+            countryNode.addAttribute("ui.label",
+                    String.valueOf(country.getUnits()) + " (" +
+                            String.valueOf(country.getContinent().getId()) + ")");
             countryNode.addAttribute("ui.class", "player1");
         }
         // Add second player nodes to graph
         for (Country country : gameState.getWorld().getPlayerTwo().getConqueredCountries()) {
             Node countryNode = graphView.addNode(String.valueOf(country.getId()));
-            countryNode.addAttribute("ui.label", String.valueOf(country.getUnits()));
+            countryNode.addAttribute("ui.label",
+                    String.valueOf(country.getUnits()) + " (" +
+                    String.valueOf(country.getContinent().getId()) + ")");
             countryNode.addAttribute("ui.class", "player2");
         }
         // Add unoccupied nodes
