@@ -130,10 +130,10 @@ public class ViewController {
 
         this.troopsCount1.setText(
                 String.valueOf(player1.getUnitsCount()) + "(+" +
-                        String.valueOf(player1.getLastTurnBonusUnits()) + ")");
+                        String.valueOf(player1.getTurnAdditionalUnits()) + ")");
         this.troopsCount2.setText(
                 String.valueOf(player2.getUnitsCount()) + "(+" +
-                        String.valueOf(player2.getLastTurnBonusUnits() + ")"));
+                        String.valueOf(player2.getTurnAdditionalUnits() + ")"));
 
         this.conqCountriesCount1.setText(
                 String.valueOf(player1.getConqueredCountries().size()));
