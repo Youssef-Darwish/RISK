@@ -19,7 +19,7 @@ public class Game {
         // Play takes both players' agents and plays the game starting from the given game state
         GameState currGameState = initialState;
         int cnt = 0;
-        while (!currGameState.isFinalState()) {
+//        while (!currGameState.isFinalState()) {
             if (currGameState.getCurrentPlayer().equals(currGameState.getWorld().getPlayerOne())) {
                 currGameState = playerOneAgent.getNextState(currGameState);
             } else {
@@ -30,12 +30,12 @@ public class Game {
                 System.out.print(c.getUnits() + " ");
             }
             System.out.println();
-        }
-        System.out.println("Winner is player with Id: " + currGameState.getWinner().getId());
-        System.out.println();
-        System.out.println("===============================================================================");
-        System.out.println("Final game state: ");
-        System.out.println("===============================================================================");
-        System.out.println(currGameState.toString());
+//        }
+//        System.out.println("Winner is player with Id: " + currGameState.getWinner().getId());
+//        System.out.println();
+//        System.out.println("===============================================================================");
+//        System.out.println("Final game state: ");
+//        System.out.println("===============================================================================");
+//        System.out.println(currGameState.toString());
     }
 }
