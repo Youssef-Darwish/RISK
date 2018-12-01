@@ -17,7 +17,6 @@ public class AggressiveAgent implements Agent {
     public GameState getNextState(GameState currentState) {
         GameState newState = (GameState) currentState.clone();
         Player agentPlayer = newState.getCurrentPlayer();
-        Player opponentPlayer = newState.getOpponentPlayer();
 
         // Place additional units on the vertex with the most units
         Country mostFortifiedCountry = agentPlayer.getMostFortifiedCountry();

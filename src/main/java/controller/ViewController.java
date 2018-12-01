@@ -8,11 +8,12 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import main.java.model.Agent;
-import main.java.model.agents.AggressiveAgent;
+import main.java.model.agents.GreedyAgent;
 import main.java.model.agents.HumanAgent;
 import main.java.model.agents.PassiveAgent;
 import main.java.model.game.Game;
 import main.java.model.game.GameState;
+import main.java.model.heuristics.GreedyHeuristic;
 import main.java.model.world.Player;
 import main.java.view.GraphView;
 import org.graphstream.ui.view.ViewerListener;
@@ -59,7 +60,7 @@ public class ViewController {
 
     private void initGame() {
         this.game = Game.getInstance();
-        this.player1 = new AggressiveAgent();
+        this.player1 = new GreedyAgent(new GreedyHeuristic());
         this.player2 = new PassiveAgent();
         this.curGameState = new GameState(FILE_NAME);
     }
@@ -106,7 +107,7 @@ public class ViewController {
 
     @FXML
     public void nextTurn() {
-        this.curGameState = this.game.play(this.curGameState, player1, player2);
+        this.curGameState = this.game.playTurn(this.curGameState, player1, player2);
         this.graphView.updateFromGameState(this.curGameState);
 
         this.toggleTurns();

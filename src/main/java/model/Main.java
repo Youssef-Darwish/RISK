@@ -1,15 +1,10 @@
 package main.java.model;
 
-import main.java.model.agents.AggressiveAgent;
 import main.java.model.agents.GreedyAgent;
-import main.java.model.agents.NearlyPacifistAgent;
 import main.java.model.agents.PassiveAgent;
 import main.java.model.game.Game;
 import main.java.model.game.GameState;
 import main.java.model.heuristics.GreedyHeuristic;
-import main.java.model.world.Continent;
-import main.java.model.world.Country;
-import main.java.model.world.Player;
 
 import java.util.*;
 
@@ -23,7 +18,7 @@ public class Main {
         System.out.println("Initial game state: ");
         System.out.println("===============================================================================");
         System.out.println(initGameState.toString());
-        Game.getInstance().play(initGameState, new GreedyAgent(new GreedyHeuristic()), new PassiveAgent());
+        Game.getInstance().simulateGame(initGameState, new GreedyAgent(new GreedyHeuristic()), new PassiveAgent());
 
 //        testClone(args);
 //        testSuccessorStates(initGameState);
