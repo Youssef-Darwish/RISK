@@ -9,7 +9,6 @@ public class HumanAgent implements Agent {
     @Override
     public GameState getNextState(GameState currentState) {
         currentState.swapPlayers();
-        currentState.setDepth(currentState.getDepth() + 1);
         return currentState;
     }
 
