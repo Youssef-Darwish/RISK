@@ -1,10 +1,13 @@
 package main.java.model;
 
+import main.java.model.agents.AStarAgent;
 import main.java.model.agents.GreedyAgent;
 import main.java.model.agents.PassiveAgent;
 import main.java.model.game.Game;
 import main.java.model.game.GameState;
+import main.java.model.heuristics.AStarHeuristic;
 import main.java.model.heuristics.GreedyHeuristic;
+import main.java.model.world.Country;
 
 import java.util.*;
 
@@ -15,9 +18,9 @@ public class Main {
         String fileName = "./risk_game.txt";
 
         GameState initGameState = new GameState(fileName);
-        System.out.println("Initial game state: ");
-        System.out.println("===============================================================================");
-        System.out.println(initGameState.toString());
+//        System.out.println("Initial game state: ");
+//        System.out.println("===============================================================================");
+//        System.out.println(initGameState.toString());
         Game.getInstance().simulateGame(initGameState, new GreedyAgent(new GreedyHeuristic()), new PassiveAgent());
 
 //        testClone(args);

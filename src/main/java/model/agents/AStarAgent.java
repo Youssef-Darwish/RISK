@@ -3,12 +3,12 @@ package main.java.model.agents;
 import main.java.model.Heuristic;
 import main.java.model.SearchAgent;
 import main.java.model.game.GameState;
+import main.java.model.world.Country;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class AStarAgent extends SearchAgent {
-    private List<GameState> pathStates;
+    public List<GameState> pathStates;
     public AStarAgent(Heuristic heuristic, GameState initState) {
         super(heuristic);
         this.pathStates = aStarSearch(initState, heuristic);
@@ -31,20 +31,25 @@ public class AStarAgent extends SearchAgent {
             GameState currState = frontier.poll();
             explored.add(currState);
             heuristicMap.remove(currState);
+            System.out.print("State: ");
+            for (Country c : currState.getWorld().getCountries()) {
+                System.out.print(c.getUnits() + "(" + c.getOccupant().getId() + ") ");
+            }
+            System.out.print("- f = " + heuristic.eval(currState));
+            System.out.println();
 
             if (currState.isFinalState()) {
                 return reconstructPath(parentsMap, currState);
             }
 
             for (GameState passiveNeighbourState : currState.getAllLegalNextStates()) {
-                GameState neighbourState = passiveAgent.getNextState(passiveNeighbourState);
+                GameState neighbourState = passiveNeighbourState.isFinalState() ? passiveNeighbourState : passiveAgent.getNextState(passiveNeighbourState);
 
                 if (explored.contains(neighbourState)) {
                     continue;
                 }
 
                 int neighbourStateHValue = heuristic.eval(neighbourState);
-
                 if (!frontier.contains(neighbourState)) {
                     frontier.add(neighbourState);
                     heuristicMap.put(neighbourState, neighbourStateHValue);
@@ -64,7 +69,7 @@ public class AStarAgent extends SearchAgent {
 
     private List<GameState> reconstructPath(Map<GameState,GameState> parentsMap, GameState currState) {
         List<GameState> path = new ArrayList<>();
-        while (parentsMap.get(currState) != null) {
+        while (currState != null) {
             path.add(currState);
             currState = parentsMap.get(currState);
         }

@@ -7,6 +7,8 @@ public class AStarHeuristic implements Heuristic {
     @Override
     public int eval(GameState gameState) {
         // f = g + h
-        return gameState.getDepth() + new GreedyHeuristic().eval(gameState);
+        if (!gameState.isFinalState())
+            return gameState.getDepth() + new GreedyHeuristic().eval(gameState);
+        return gameState.getDepth();
     }
 }

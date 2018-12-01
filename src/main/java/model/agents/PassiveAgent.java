@@ -24,7 +24,7 @@ public class PassiveAgent implements Agent {
         // Finalizing move
         agentPlayer.setLastTurnBonusUnits(0);
         newState.swapPlayers();
-        newState.setDepth(newState.getDepth() + 1);
+//        newState.setDepth(newState.getDepth() + 1);
         return newState;
     }
 }

@@ -137,6 +137,7 @@ public class GameState implements Cloneable {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
+        sb.append("State depth = ").append(getDepth()).append("\n");
         sb.append("World countries: \n");
         for (Country country : this.world.getCountries()) {
             sb.append("Id: ").append(country.getId()).append(", Occupant Id: ").append(country.getOccupant().getId()).append(", Units in country: ").append(country.getUnits()).append(", Continent Id: ").append(country.getContinent().getId()).append("\n");

@@ -12,16 +12,16 @@ public class GreedyHeuristic implements Heuristic {
     @Override
     public int eval(GameState gameState) {
 //        int res = 0;
-//        res += gameState.getCurrentPlayer().getConqueredCountries().size();
-//        res += gameState.getCurrentPlayer()
+//        res -= gameState.getCurrentPlayer().getConqueredCountries().size();
+//        res -= gameState.getCurrentPlayer()
 //                .getConqueredContinents().stream()
 //                .mapToInt(Continent::getContinentBonus).sum();
-//        res -= gameState.getOpponentPlayer()
+//        res += gameState.getOpponentPlayer()
 //                .getConqueredCountries().size();
-//        res -= gameState.getOpponentPlayer()
+//        res += gameState.getOpponentPlayer()
 //                .getConqueredContinents().stream()
 //                .mapToInt(Continent::getContinentBonus).sum();
 //        return res;
-        return gameState.getCurrentPlayer().getConqueredCountries().size();
+        return gameState.getOpponentPlayer().getConqueredCountries().size();
     }
 }
