@@ -22,6 +22,6 @@ public class GreedyHeuristic implements Heuristic {
 //                .getConqueredContinents().stream()
 //                .mapToInt(Continent::getContinentBonus).sum();
 //        return res;
-        return gameState.getOpponentPlayer().getConqueredCountries().size();
+        return gameState.isFinalState() ? 0 : gameState.getOpponentPlayer().getConqueredCountries().size();
     }
 }

@@ -39,7 +39,7 @@ public class Game {
             }
             System.out.print("State #" + cnt++ + ": ");
             for (Country c : currGameState.getWorld().getCountries()) {
-                System.out.print(c.getUnits() + " ");
+                System.out.print(c.getUnits() + "(" + c.getOccupant().getId() + ") ");
             }
             System.out.println();
         }

@@ -23,20 +23,10 @@ public class Main {
         System.out.println("===============================================================================");
         System.out.println(initGameState.toString());
         System.out.println("===============================================================================");
-//        Game.getInstance().simulateGame(initGameState, new GreedyAgent(new GreedyHeuristic()), new PassiveAgent());
+        Game.getInstance().simulateGame(initGameState, new GreedyAgent(new GreedyHeuristic()), new PassiveAgent());
 //        Game.getInstance().simulateGame(initGameState, new RealTimeAStarAgent(new AStarHeuristic(), 1), new PassiveAgent());
-        Game.getInstance().simulateGame(initGameState, new AStarAgent(new AStarHeuristic(), initGameState), new PassiveAgent());
+//        Game.getInstance().simulateGame(initGameState, new AStarAgent(new AStarHeuristic(), initGameState), new PassiveAgent());
 
-//        List<GameState> path = new AStarAgent(new AStarHeuristic(), initGameState).pathStates;
-//        System.out.println("Steps taken to reach goal: " + (path.size() - 1));
-//        int cnt = 0;
-//        for (GameState gs : path) {
-//            System.out.print("State #" + cnt++ + ": ");
-//            for (Country c : gs.getWorld().getCountries()) {
-//                System.out.print(c.getUnits() + "(" + c.getOccupant().getId() + ") ");
-//            }
-//            System.out.println();
-//        }
 //        testClone(args);
 //        testSuccessorStates(initGameState);
     }
