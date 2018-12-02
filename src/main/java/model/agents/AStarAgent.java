@@ -13,7 +13,7 @@ public class AStarAgent extends SearchAgent {
     public AStarAgent(Heuristic heuristic, GameState initState) {
         super(heuristic);
         this.pathStates = aStarSearch(initState);
-        this.currentSearchDepth = 0;
+        this.currentSearchDepth = 1;
     }
 
     private List<GameState> aStarSearch(GameState initState) {

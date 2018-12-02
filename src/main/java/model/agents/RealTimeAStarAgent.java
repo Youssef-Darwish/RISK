@@ -31,7 +31,7 @@ public class RealTimeAStarAgent extends SearchAgent {
             explored.add(currState);
             heuristicMap.remove(currState);
 
-            if (currState.isFinalState() || currentState.getSearchDepth() >= this.depthLimit) {
+            if (currState.isFinalState() || currState.getSearchDepth() >= this.depthLimit) {
                 this.turnsToWin++;
                 return reconstructPath(parentsMap, currState);
             }
