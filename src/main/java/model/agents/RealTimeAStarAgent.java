@@ -15,7 +15,6 @@ public class RealTimeAStarAgent extends SearchAgent {
 
     @Override
     public GameState getNextState(GameState currentState) {
-        // NOTE: CHECK LAST STATE IN THE LIST TO KNOW IF A STAR REACHED A SOLUTION OR NOT
         Queue<GameState> frontier = new PriorityQueue<>(Comparator.comparing(getHeuristic()::eval));
         Map<GameState, Integer> heuristicMap = new HashMap<>();
         Map<GameState, GameState> parentsMap = new HashMap<>();
@@ -33,9 +32,10 @@ public class RealTimeAStarAgent extends SearchAgent {
             heuristicMap.remove(currState);
 
             if (currState.isFinalState() || currentState.getSearchDepth() >= this.depthLimit) {
+                this.turnsToWin++;
                 return reconstructPath(parentsMap, currState);
             }
-
+            this.searchExpansionSteps++;
             for (GameState passiveNeighbourState : currState.getAllLegalNextStates()) {
                 GameState neighbourState = passiveNeighbourState.isFinalState() ? passiveNeighbourState : passiveAgent.getNextState(passiveNeighbourState);
 

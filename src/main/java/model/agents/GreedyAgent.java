@@ -26,6 +26,11 @@ public class GreedyAgent extends SearchAgent {
                 newState = nextState;
             }
         }
+        if (newState.isFinalState()) {
+            this.turnsToWin = newState.getSearchDepth();
+        } else {
+            this.searchExpansionSteps++;
+        }
         return newState;
     }
 }

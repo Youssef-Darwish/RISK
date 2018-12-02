@@ -8,7 +8,7 @@ import main.java.model.world.Country;
 import java.util.*;
 
 public class AStarAgent extends SearchAgent {
-    public List<GameState> pathStates;
+    private List<GameState> pathStates;
     private int currentSearchDepth;
     public AStarAgent(Heuristic heuristic, GameState initState) {
         super(heuristic);
@@ -17,7 +17,6 @@ public class AStarAgent extends SearchAgent {
     }
 
     private List<GameState> aStarSearch(GameState initState) {
-        // NOTE: CHECK LAST STATE IN THE LIST TO KNOW IF A STAR REACHED A SOLUTION OR NOT
         Queue<GameState> frontier = new PriorityQueue<>(Comparator.comparing(getHeuristic()::eval));
         Map<GameState, Integer> heuristicMap = new HashMap<>();
         Map<GameState, GameState> parentsMap = new HashMap<>();
@@ -35,9 +34,10 @@ public class AStarAgent extends SearchAgent {
             heuristicMap.remove(currState);
 
             if (currState.isFinalState()) {
+                this.turnsToWin = currState.getSearchDepth();
                 return reconstructPath(parentsMap, currState);
             }
-
+            this.searchExpansionSteps++;
             for (GameState passiveNeighbourState : currState.getAllLegalNextStates()) {
                 GameState neighbourState = passiveNeighbourState.isFinalState() ? passiveNeighbourState : passiveAgent.getNextState(passiveNeighbourState);
 
