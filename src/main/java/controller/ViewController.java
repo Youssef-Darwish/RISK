@@ -49,7 +49,7 @@ public class ViewController {
     private final static String FILE_NAME = "./risk_game.txt";
 
     /** HumanAgent state **/
-    enum HumanState {
+    private enum HumanState {
         IDLE,
         REINFORCING,
         IDLE_ATTACKING,
@@ -57,8 +57,8 @@ public class ViewController {
         ATTACKING,
         FINISHED
     }
-    HumanState curHumanState = HumanState.IDLE_ATTACKING;
-    int curCountrySelected = -1;
+    private HumanState curHumanState = HumanState.IDLE;
+    private int curCountrySelected = -1;
 
     @FXML
     public void initialize() {
@@ -116,6 +116,9 @@ public class ViewController {
                 player1 instanceof HumanAgent : player2 instanceof HumanAgent;
         this.humanButton.setDisable(!human);
         this.nextTurnButton.setDisable(human);
+
+        if (human)
+            humanButton.setText("R E I N F O R C E");
 
         this.updateInfo();
     }
