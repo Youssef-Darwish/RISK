@@ -209,6 +209,9 @@ public class ViewController {
 
         switch (curHumanState) {
             case REINFORCING:
+                if (curGameState.getWorld().getCountryById(countryId).getOccupant()
+                        != curGameState.getCurrentPlayer())
+                    break;
                 System.out.println("Reinforcing country: " + countryId);
                 curGameState = human.reinforceCountry(curGameState, countryId);
                 curHumanState = HumanState.IDLE_ATTACKING;
@@ -230,6 +233,9 @@ public class ViewController {
                     break;
                 }
                 System.out.println("Attacked country: " + countryId);
+                if (curGameState.getWorld().getCountryById(countryId).getOccupant()
+                        == curGameState.getCurrentPlayer())
+                    break;
                 curGameState = human.attack(curGameState, curCountrySelected, countryId);
                 curHumanState = HumanState.FINISHED;
                 break;
