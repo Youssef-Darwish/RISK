@@ -145,7 +145,7 @@
                   </HBox>
                </children>
             </VBox>
-            <JFXButton fx:id="attackButton" prefWidth="200.0" style="-fx-background-color: #454545;" text="A T T A C K" textFill="WHITE" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="5.0" />
+            <JFXButton fx:id="humanButton" onAction="#handleHumanButtonClick" prefWidth="200.0" style="-fx-background-color: #454545;" text="A T T A C K" textFill="WHITE" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="5.0" />
             <JFXButton fx:id="nextTurnButton" onAction="#nextTurn" disable="true" layoutX="10.0" layoutY="10.0" prefWidth="200.0" style="-fx-background-color: #454545;" text="N E X T  T U R N" textFill="WHITE" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="35.0" />
             <Label graphicTextGap="10.0" text="T U R N " textFill="WHITE" AnchorPane.rightAnchor="260.0" AnchorPane.topAnchor="8.0">
                <graphic>
