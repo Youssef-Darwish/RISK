@@ -1,6 +1,7 @@
 package main.java.controller;
 
 import com.jfoenix.controls.JFXButton;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -8,12 +9,10 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import main.java.model.Agent;
-import main.java.model.agents.GreedyAgent;
 import main.java.model.agents.HumanAgent;
 import main.java.model.agents.PassiveAgent;
 import main.java.model.game.Game;
 import main.java.model.game.GameState;
-import main.java.model.heuristics.GreedyHeuristic;
 import main.java.model.world.Player;
 import main.java.view.GraphView;
 import org.graphstream.ui.view.ViewerListener;
@@ -24,7 +23,7 @@ public class ViewController {
     /** FXML Variables **/
     @FXML private StackPane root;
     @FXML private BorderPane gameOverPane;
-    @FXML private JFXButton attackButton;
+    @FXML private JFXButton humanButton;
     @FXML private JFXButton nextTurnButton;
     @FXML private ImageView curTurnIcon;
     @FXML private ImageView winningPlayerIcon;
@@ -49,6 +48,18 @@ public class ViewController {
     /** Testing Variables **/
     private final static String FILE_NAME = "./risk_game.txt";
 
+    /** HumanAgent state **/
+    enum HumanState {
+        IDLE,
+        REINFORCING,
+        IDLE_ATTACKING,
+        SELECTING,
+        ATTACKING,
+        FINISHED
+    }
+    HumanState curHumanState = HumanState.IDLE_ATTACKING;
+    int curCountrySelected = -1;
+
     @FXML
     public void initialize() {
         this.initGame();
@@ -60,7 +71,8 @@ public class ViewController {
 
     private void initGame() {
         this.game = Game.getInstance();
-        this.player1 = new GreedyAgent(new GreedyHeuristic());
+//        this.player1 = new GreedyAgent(new GreedyHeuristic());
+        this.player1 = new HumanAgent();
         this.player2 = new PassiveAgent();
         this.curGameState = new GameState(FILE_NAME);
     }
@@ -92,14 +104,17 @@ public class ViewController {
 
             @Override
             public void buttonReleased(String id) {
-                System.out.println("Button released on node: " + id);
+                if (!(player1 instanceof HumanAgent))
+                    return;
+                handleHumanNodeClick(Integer.valueOf(id));
             }
         });
     }
 
     private void initControls() {
-        boolean human = this.player1 instanceof HumanAgent;
-        this.attackButton.setDisable(!human);
+        boolean human = this.curGameState.getCurrentPlayer().getId() == 0 ?
+                player1 instanceof HumanAgent : player2 instanceof HumanAgent;
+        this.humanButton.setDisable(!human);
         this.nextTurnButton.setDisable(human);
 
         this.updateInfo();
@@ -110,8 +125,10 @@ public class ViewController {
         this.curGameState = this.game.playTurn(this.curGameState, player1, player2);
         this.graphView.updateFromGameState(this.curGameState);
 
-        this.toggleTurns();
-        this.updateInfo();
+        this.setTurns();
+
+        this.curHumanState = HumanState.IDLE;
+        this.initControls();
 
         if (this.curGameState.isFinalState()) {
             this.nextTurnButton.setDisable(true);
@@ -119,7 +136,34 @@ public class ViewController {
         }
     }
 
-    private void toggleTurns() {
+    @FXML
+    public void handleHumanButtonClick() {
+        switch (curHumanState) {
+            case IDLE:
+                curHumanState = HumanState.REINFORCING;
+                humanButton.setDisable(true);
+                break;
+            case IDLE_ATTACKING:
+                curHumanState = HumanState.SELECTING;
+                humanButton.setText("C A N C E L");
+                humanButton.setDisable(false);
+                break;
+            case SELECTING:
+                curHumanState = HumanState.FINISHED;
+                humanButton.setText("R E I N F O R C E");
+                humanButton.setDisable(true);
+                nextTurnButton.setDisable(false);
+            case ATTACKING:
+                curHumanState = HumanState.FINISHED;
+                humanButton.setText("R E I N F O R C E");
+                humanButton.setDisable(true);
+                nextTurnButton.setDisable(false);
+            default:
+                break;
+        }
+    }
+
+    private void setTurns() {
         this.curTurnIcon.setImage(new Image(
                 this.curGameState.getCurrentPlayer().equals(this.curGameState.getWorld().getPlayerOne()) ?
                         PLAYER_1_ICON : PLAYER_2_ICON));
@@ -148,12 +192,69 @@ public class ViewController {
     }
 
     private void drawGameOver() {
-        this.attackButton.setDisable(true);
+        this.humanButton.setDisable(true);
         this.nextTurnButton.setDisable(true);
         this.gameOverPane.toFront();
 
         this.winningPlayerIcon.setImage(new Image(
                 this.curGameState.getWinner().equals(this.curGameState.getWorld().getPlayerOne()) ?
                         PLAYER_1_ICON: PLAYER_2_ICON));
+    }
+
+    private void handleHumanNodeClick(int countryId) {
+        HumanAgent human = (HumanAgent) player1;
+
+        switch (curHumanState) {
+            case REINFORCING:
+                System.out.println("Reinforcing country: " + countryId);
+                curGameState = human.reinforceCountry(curGameState, countryId);
+                curHumanState = HumanState.IDLE_ATTACKING;
+                break;
+
+            case SELECTING:
+                if (curGameState.getWorld().getCountryById(countryId).getOccupant()
+                        != curGameState.getCurrentPlayer())
+                    break;
+                System.out.println("Selected country: " + countryId);
+                curCountrySelected = countryId;
+                curHumanState = HumanState.ATTACKING;
+                break;
+
+            case ATTACKING:
+                if (countryId == curCountrySelected) {
+                    curCountrySelected = -1;
+                    curHumanState = HumanState.SELECTING;
+                    break;
+                }
+                System.out.println("Attacked country: " + countryId);
+                curGameState = human.attack(curGameState, curCountrySelected, countryId);
+                curHumanState = HumanState.FINISHED;
+                break;
+
+            default:
+                break;
+        }
+
+        Platform.runLater(() -> {
+            this.graphView.updateFromGameState(this.curGameState);
+            this.updateInfo();
+
+            switch (curHumanState) {
+                case IDLE:
+                    humanButton.setDisable(false);
+                    nextTurnButton.setDisable(true);
+                    humanButton.setText("R E I N F O R C E");
+                    break;
+                case IDLE_ATTACKING:
+                    humanButton.setDisable(false);
+                    humanButton.setText("A T T A C K");
+                    break;
+                case FINISHED:
+                    humanButton.setDisable(true);
+                    nextTurnButton.setDisable(false);
+                    humanButton.setText("R E I N F O R C E");
+                    break;
+            }
+        });
     }
 }
