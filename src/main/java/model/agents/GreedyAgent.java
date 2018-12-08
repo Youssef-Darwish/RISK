@@ -23,7 +23,7 @@ public class GreedyAgent extends SearchAgent {
             int curr_h = getHeuristic().eval(nextState);
             if (curr_h < best_h) {
                 best_h = curr_h;
-                newState = nextState;
+                newState = passiveState;
             }
         }
         if (newState.isFinalState()) {

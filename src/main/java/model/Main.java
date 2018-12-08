@@ -1,9 +1,6 @@
 package main.java.model;
 
-import main.java.model.agents.AStarAgent;
-import main.java.model.agents.GreedyAgent;
-import main.java.model.agents.PassiveAgent;
-import main.java.model.agents.RealTimeAStarAgent;
+import main.java.model.agents.*;
 import main.java.model.game.Game;
 import main.java.model.game.GameState;
 import main.java.model.heuristics.AStarHeuristic;
@@ -24,8 +21,9 @@ public class Main {
         System.out.println(initGameState.toString());
         System.out.println("===============================================================================");
 //        Game.getInstance().simulateGame(initGameState, new GreedyAgent(new GreedyHeuristic()), new PassiveAgent());
-//        Game.getInstance().simulateGame(initGameState, new AStarAgent(new AStarHeuristic(), initGameState), new PassiveAgent());
-        Game.getInstance().simulateGame(initGameState, new RealTimeAStarAgent(new AStarHeuristic(), 2), new PassiveAgent());
+        Game.getInstance().simulateGame(initGameState, new AStarAgent(new AStarHeuristic(), initGameState), new PassiveAgent());
+//        Game.getInstance().simulateGame(initGameState, new RealTimeAStarAgent(new AStarHeuristic(), 3), new PassiveAgent());
+//        Game.getInstance().simulateGame(initGameState, new PassiveAgent(), new AggressiveAgent());
 
 //        testClone(args);
 //        testSuccessorStates(initGameState);

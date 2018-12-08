@@ -35,8 +35,9 @@ public class Game {
             System.out.print(c.getUnits() + "(" + c.getOccupant().getId() + ") ");
         }
         System.out.println();
+        boolean turn = false;
         while (!currGameState.isFinalState()) {
-            if (currGameState.getCurrentPlayer().equals(currGameState.getWorld().getPlayerOne())) {
+            if (currGameState.getCurrentPlayer().getId() == currGameState.getWorld().getPlayerOne().getId()) {
                 currGameState = playerOneAgent.getNextState(currGameState);
             } else {
                 currGameState = playerTwoAgent.getNextState(currGameState);
@@ -46,6 +47,7 @@ public class Game {
                 System.out.print(c.getUnits() + "(" + c.getOccupant().getId() + ") ");
             }
             System.out.println();
+            turn = !turn;
         }
         System.out.println();
         System.out.println("Winner is player with Id: " + currGameState.getWinner().getId());
