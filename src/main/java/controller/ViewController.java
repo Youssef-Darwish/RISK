@@ -9,6 +9,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import main.java.model.Agent;
+import main.java.model.SearchAgent;
 import main.java.model.agents.HumanAgent;
 import main.java.model.agents.PassiveAgent;
 import main.java.model.game.Game;
@@ -134,6 +135,11 @@ public class ViewController {
         this.initControls();
 
         if (this.curGameState.isFinalState()) {
+            if (player1 instanceof SearchAgent) {
+                this.game.reportPerformance(((SearchAgent) player1).getTurnsToWin(), ((SearchAgent) player1).getSearchExpansionSteps());
+            } else if (player2 instanceof SearchAgent) {
+                this.game.reportPerformance(((SearchAgent) player2).getTurnsToWin(), ((SearchAgent) player2).getSearchExpansionSteps());
+            }
             this.nextTurnButton.setDisable(true);
             this.drawGameOver();
         }

@@ -64,7 +64,7 @@ public class Game {
         }
     }
 
-    private void reportPerformance(int turnsToWin, int searchExpansionSteps) {
+    public void reportPerformance(int turnsToWin, int searchExpansionSteps) {
         System.out.println("Turns taken by agent to win = " + turnsToWin);
         System.out.println("Number of expansion steps = " + searchExpansionSteps);
         System.out.println("Performance measure (for f = 1): " + (turnsToWin + searchExpansionSteps));
