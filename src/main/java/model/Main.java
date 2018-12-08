@@ -20,9 +20,9 @@ public class Main {
         System.out.println("===============================================================================");
         System.out.println(initGameState.toString());
         System.out.println("===============================================================================");
-//        Game.getInstance().simulateGame(initGameState, new GreedyAgent(new GreedyHeuristic()), new PassiveAgent());
-        Game.getInstance().simulateGame(initGameState, new AStarAgent(new AStarHeuristic(), initGameState), new PassiveAgent());
-//        Game.getInstance().simulateGame(initGameState, new RealTimeAStarAgent(new AStarHeuristic(), 3), new PassiveAgent());
+        Game.getInstance().simulateGame(initGameState, new GreedyAgent(new GreedyHeuristic()), new PassiveAgent());
+//        Game.getInstance().simulateGame(initGameState, new AStarAgent(new AStarHeuristic(), initGameState), new PassiveAgent());
+//        Game.getInstance().simulateGame(initGameState, new RealTimeAStarAgent(new AStarHeuristic(), 1), new PassiveAgent());
 //        Game.getInstance().simulateGame(initGameState, new PassiveAgent(), new AggressiveAgent());
 
 //        testClone(args);
