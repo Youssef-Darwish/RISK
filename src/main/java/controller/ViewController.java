@@ -62,19 +62,19 @@ public class ViewController {
 
     @FXML
     public void initialize() {
-        this.initGame();
-        this.initGraphStream();
-        this.initControls();
 
-        this.gameOverPane.toBack();
     }
 
-    private void initGame() {
+    public void initGame(Agent agent, GameState initGameState) {
         this.game = Game.getInstance();
-//        this.player1 = new GreedyAgent(new GreedyHeuristic());
-        this.player1 = new HumanAgent();
+        this.player1 = agent;
         this.player2 = new PassiveAgent();
-        this.curGameState = new GameState(FILE_NAME);
+        this.curGameState = initGameState;
+
+        this.initGraphStream();
+        this.initControls();
+        this.gameOverPane.toBack();
+
     }
 
     private void initGraphStream() {

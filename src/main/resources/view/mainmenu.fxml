@@ -10,9 +10,134 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="main.resources.view.Mainmenu"
-            prefHeight="400.0" prefWidth="600.0">
-
-</AnchorPane>
+<StackPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.controller.MainMenuController">
+    <children>
+      <ImageView fitHeight="800.0" fitWidth="1200.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@assets/mainmenu_background.png" />
+         </image>
+      </ImageView>
+        <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" spacing="20.0" style="-fx-background-color: rgba(120,120,120,0.3);">
+            <children>
+                <Label text="C H O O S E  A G E N T">
+                    <font>
+                        <Font size="50.0" />
+                    </font>
+                    <VBox.margin>
+                        <Insets bottom="30.0" />
+                    </VBox.margin>
+                </Label>
+                <JFXButton contentDisplay="TOP" graphicTextGap="6.0" onAction="#chooseHuman" text="HUMAN">
+                    <graphic>
+                        <ImageView fitHeight="150.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@../view/assets/brain.png" />
+                            </image>
+                        </ImageView>
+                    </graphic>
+                    <font>
+                        <Font size="18.0" />
+                    </font>
+                </JFXButton>
+                <HBox maxWidth="-Infinity" prefHeight="100.0" spacing="50.0">
+                    <children>
+                        <JFXButton contentDisplay="TOP" graphicTextGap="6.0" onAction="#choosePassive" text="PASSIVE">
+                            <graphic>
+                                <ImageView fitHeight="150.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                        <Image url="@../view/assets/ai.png" />
+                                    </image>
+                                </ImageView>
+                            </graphic>
+                            <font>
+                                <Font size="18.0" />
+                            </font>
+                            <HBox.margin>
+                                <Insets />
+                            </HBox.margin>
+                        </JFXButton>
+                        <JFXButton contentDisplay="TOP" graphicTextGap="6.0" onAction="#chooseAggressive" text="AGGRESSIVE">
+                            <graphic>
+                                <ImageView fitHeight="150.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                        <Image url="@../view/assets/ai.png" />
+                                    </image>
+                                </ImageView>
+                            </graphic>
+                            <font>
+                                <Font size="18.0" />
+                            </font>
+                        </JFXButton>
+                        <JFXButton contentDisplay="TOP" graphicTextGap="6.0" onAction="#choosePacifist" text="PACIFIST" wrapText="true">
+                            <graphic>
+                                <ImageView fitHeight="150.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                        <Image url="@../view/assets/ai.png" />
+                                    </image>
+                                </ImageView>
+                            </graphic>
+                            <font>
+                                <Font size="18.0" />
+                            </font>
+                            <HBox.margin>
+                                <Insets />
+                            </HBox.margin>
+                        </JFXButton>
+                    </children>
+                    <VBox.margin>
+                        <Insets />
+                    </VBox.margin>
+                </HBox>
+                <HBox maxWidth="-Infinity" prefHeight="100.0" spacing="50.0">
+                    <children>
+                        <JFXButton contentDisplay="TOP" graphicTextGap="6.0" onAction="#chooseGreedy" text="GREEDY">
+                            <graphic>
+                                <ImageView fitHeight="150.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                        <Image url="@../view/assets/search_ai.png" />
+                                    </image>
+                                </ImageView>
+                            </graphic>
+                            <font>
+                                <Font size="18.0" />
+                            </font>
+                            <HBox.margin>
+                                <Insets />
+                            </HBox.margin>
+                        </JFXButton>
+                        <JFXButton contentDisplay="TOP" graphicTextGap="6.0" onAction="#chooseAStar" text="A-STAR">
+                            <graphic>
+                                <ImageView fitHeight="150.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                        <Image url="@../view/assets/search_ai.png" />
+                                    </image>
+                                </ImageView>
+                            </graphic>
+                            <font>
+                                <Font size="18.0" />
+                            </font>
+                        </JFXButton>
+                        <JFXButton contentDisplay="TOP" graphicTextGap="6.0" onAction="#chooseRealtimeAStar" text="REALTIME A*" wrapText="true">
+                            <graphic>
+                                <ImageView fitHeight="150.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                        <Image url="@../view/assets/search_ai.png" />
+                                    </image>
+                                </ImageView>
+                            </graphic>
+                            <font>
+                                <Font size="18.0" />
+                            </font>
+                            <HBox.margin>
+                                <Insets />
+                            </HBox.margin>
+                        </JFXButton>
+                    </children>
+                </HBox>
+            </children>
+            <padding>
+                <Insets bottom="40.0" left="40.0" right="40.0" top="40.0" />
+            </padding>
+        </VBox>
+    </children>
+</StackPane>

@@ -8,5 +8,5 @@ import main.java.model.world.Player;
 import java.util.List;
 
 public interface Agent {
-    public GameState getNextState(GameState currentState);
+    GameState getNextState(GameState currentState);
 }

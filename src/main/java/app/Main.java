@@ -10,10 +10,16 @@ import org.graphstream.graph.Graph;
 import org.graphstream.graph.implementations.SingleGraph;
 
 public class Main extends Application {
+    private static FXMLLoader loader;
+
+    public static void setLoader(FXMLLoader fxmlLoader) {
+        loader = fxmlLoader;
+    }
 
     @Override
-    public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("/main/resources/view/sample.fxml"));
+    public void start(Stage primaryStage) throws Exception {
+        loader = new FXMLLoader(getClass().getResource("/main/resources/view/mainmenu.fxml"));
+        Parent root = loader.load();
         primaryStage.setTitle("Risk");
         primaryStage.setScene(new Scene(root, 1200, 800));
         primaryStage.setResizable(false);
